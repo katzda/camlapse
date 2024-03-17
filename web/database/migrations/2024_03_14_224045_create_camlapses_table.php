@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('description');
             $table->Integer('fph');
-            $table->Integer('max_frames')->default(10000)->nullable();
             $table->tinyInteger('between_hour_start')->nullable();
             $table->tinyInteger('between_hour_end')->nullable();
-            $table->dateTime('end_datetime')->nullable();
+            $table->tinyInteger('memory_period')->nullable();//day/week/month/year
+            $table->dateTime('stop_datetime')->nullable();
             $table->timestamps();
         });
     }
