@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('camlapses', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->string('name', 255)->unique();
             $table->string('description');
             $table->Integer('fph');
             $table->tinyInteger('between_hour_start')->nullable();

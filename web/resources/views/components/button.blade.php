@@ -1,8 +1,9 @@
-@props(['href'])
+@props(['href', 'icon', 'title'])
 
 <a
     class="inline-block"
-    href=""
+    href="{{ $href }}"
 >
-    {{ $slot }}
+    <x-icon id="{{$icon}}"/>
+    {{$title}}
 </a>

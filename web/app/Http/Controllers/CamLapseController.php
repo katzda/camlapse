@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CamLapse;
 use Illuminate\Http\Request;
+use App\Http\Requests\CamLapseCreateRequest;
 
 class CamLapseController extends Controller
 {
@@ -12,7 +13,7 @@ class CamLapseController extends Controller
      */
     public function index()
     {
-        return View('camlapse.welcome', [
+        return View('camlapse.index', [
             'all' => CamLapse::all()
         ]);
     }
@@ -22,15 +23,24 @@ class CamLapseController extends Controller
      */
     public function create()
     {
-        //
+        return View('camlapse.create', [
+            'all' => CamLapse::all()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CamLapseCreateRequest $request)
     {
-        //
+        try{
+            CamLapse::create($request->validated());
+        }catch(\Exception $e){
+        }
+
+        return View('camlapse.index', [
+            'all' => CamLapse::all()
+        ]);
     }
 
     /**

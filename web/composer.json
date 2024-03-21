@@ -1,9 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "katzda/camlapse",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "description": "Capturing videos over long periods of time",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.0",
