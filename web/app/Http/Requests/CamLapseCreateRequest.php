@@ -22,7 +22,7 @@ class CamLapseCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','max:255'],
+            'name' => ['required','string','max:255','unique:camlapses'],
             'description' => ['required','string'],
             'fph' => ['required','integer','min:1'],
             'between_hour_start' => ['nullable', 'integer','min:0', 'max:24'],

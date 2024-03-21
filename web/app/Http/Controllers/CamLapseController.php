@@ -33,10 +33,7 @@ class CamLapseController extends Controller
      */
     public function store(CamLapseCreateRequest $request)
     {
-        try{
-            CamLapse::create($request->validated());
-        }catch(\Exception $e){
-        }
+        CamLapse::create($request->validated());
 
         return View('camlapse.index', [
             'all' => CamLapse::all()
