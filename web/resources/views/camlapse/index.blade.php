@@ -41,6 +41,12 @@
                     />
                 @else
                     RUNNING!
+                    <x-form
+                        action="{{route('camlapse.deactivate', ['camlapse' => $camlapse['id']])}}"
+                        id="deactivate-camlapse"
+                        method="POST"
+                        submit="Deactivate"
+                    />
                 @endif
             </x-tile>
         @endforeach

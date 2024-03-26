@@ -84,4 +84,9 @@ class CamLapseController extends Controller
         $camlapse->save();
         return redirect(route('camlapse.index'));
     }
+
+    public function deactivate(CamLapse $camlapse){
+        $camlapse->deactivate();
+        return redirect(route('camlapse.index'));
+    }
 }

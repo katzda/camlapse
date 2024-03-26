@@ -32,4 +32,9 @@ class CamLapse extends Model
                 'is_active' => false
             ]);
     }
+
+    public function deactivate(){
+        $this->is_active = false;
+        $this->save();
+    }
 }
