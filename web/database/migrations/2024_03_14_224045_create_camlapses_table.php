@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('camlapses', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->unique();
-            $table->string('description');
+            $table->string('description')->default('');
             $table->Integer('fph');
             $table->tinyInteger('between_hour_start')->nullable();
             $table->tinyInteger('between_hour_end')->nullable();
             $table->tinyInteger('memory_period')->nullable();//day/week/month/year
             $table->dateTime('stop_datetime')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

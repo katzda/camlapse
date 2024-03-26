@@ -25,4 +25,11 @@ class CamLapse extends Model
     public const MEMORY_PERIOD_WEEK = 2;
     public const MEMORY_PERIOD_MONTH = 3;
     public const MEMORY_PERIOD_YEAR = 4;
+
+    public static function deactivateAll(){
+        CamLapse::where('is_active', true)
+            ->update([
+                'is_active' => false
+            ]);
+    }
 }

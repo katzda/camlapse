@@ -10,4 +10,5 @@ Route::withoutMiddleware([VerifyCsrfToken::class])->group(function(){
     Route::resources([
         'camlapse' => CamLapseController::class
     ]);
+    Route::post('camlapse/{camlapse}/activate', [CamLapseController::class, 'activate'])->name('camlapse.activate');
 });

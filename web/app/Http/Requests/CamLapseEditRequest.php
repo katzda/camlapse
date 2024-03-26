@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CamLapseCreateRequest extends FormRequest
+class CamLapseEditRequest extends FormRequest
 {
+    public $camlapse;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,7 +23,8 @@ class CamLapseCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','max:255','unique:camlapses'],
+            'id' => ['required','integer','exists:camlapses,id'],
+            'name' => ['required','string','max:255','unique:camlapses,id,'.$this->camlapse->id],
             'description' => ['nullable','string'],
             'fph' => ['required','integer','min:1'],
             'between_hour_start' => ['nullable', 'integer','min:0', 'max:24'],
@@ -34,8 +36,10 @@ class CamLapseCreateRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $this->camlapse = $this->route('camlapse');
+
         $this->merge([
-            'description' => $this->description ?? ''
+            'id' => $this->camlapse->id
         ]);
     }
 }
