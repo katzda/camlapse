@@ -22,6 +22,11 @@ class CamLapseEditRequest extends FormRequest
      */
     public function rules(): array
     {
+
+
+
+
+
         return [
             'id' => ['required','integer','exists:camlapses,id'],
             'name' => ['required','string','max:255','unique:camlapses,id,'.$this->camlapse->id],
