@@ -63,10 +63,7 @@ class CamLapseController extends Controller
      */
     public function update(CamLapseEditRequest $request, CamLapse $camlapse)
     {
-        $camlapse->save($request->validated());
-
-
-
+        $camlapse->update($request->validated());
 
         return redirect(route('camlapse.show', [
             'camlapse' => $camlapse
@@ -84,21 +81,11 @@ class CamLapseController extends Controller
 
     public function activate(CamLapse $camlapse){
         CamLapse::deactivateAll();
-        $camlapse->is_active = true;
-        $camlapse->save();
-
-
-
-
-
-
+        $camlapse->activate();
         return redirect(route('camlapse.index'));
     }
 
     public function deactivate(CamLapse $camlapse){
-
-
-
         $camlapse->deactivate();
         return redirect(route('camlapse.index'));
     }

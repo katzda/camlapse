@@ -1,7 +1,7 @@
-@props(['href', 'icon', 'title'])
+@props(['href', 'icon', 'title', 'class'])
 
 <a
-    class="inline-block"
+    {{ $attributes->merge([ 'class' => 'inline-block' ]) }}
     href="{{ $href }}"
 >
     <x-icon id="{{$icon}}"/>

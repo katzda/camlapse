@@ -1,8 +1,9 @@
 @extends('layout')
 
 @section('header')
-    <div class="flex lg:justify-center lg:col-start-2">
+    <div class="text-center rounded-lg bg-white">
         <x-button
+            class="shadow-lg"
             href="{{ route('camlapse.create') }}"
             icon="book"
             title="Add Time Lapse"
@@ -40,7 +41,7 @@
                         submit="Activate"
                     />
                 @else
-                    RUNNING!
+                    Active
                     <x-form
                         action="{{route('camlapse.deactivate', ['camlapse' => $camlapse['id']])}}"
                         id="deactivate-camlapse"

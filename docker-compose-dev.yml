@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   app:
     container_name: $WEB_HOST
@@ -34,6 +32,7 @@ services:
       backend:
     ports:
       - 80:80
+      - 5173:5173
 
 secrets:
   env:

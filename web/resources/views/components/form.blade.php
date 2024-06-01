@@ -1,10 +1,10 @@
-@props(['action', 'id', 'title'=>'', 'fields' => [], 'method', 'submit' => 'Submit'])
+@props(['action', 'id', 'title'=>'', 'fields' => [], 'method', 'submit' => 'Submit', 'class' => ''])
 
 @php
     $is_method_standard = $method == 'GET' || $method == 'POST';
 @endphp
 
-<form action="{{ $action }}" {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!} class="w-full text-center">
+<form action="{{ $action }}" {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!} class="w-full text-center p-3 {{ $class }} rounded-lg">
 
     @if(!$is_method_standard)
         @method($method)
@@ -27,12 +27,12 @@
                 @else
                     <div class="table-row leading-10">
                         <div class="table-cell pr-3 text-right">{{ $fieldvalue['title']}}:</div>
-                        <div class="table-cell my-1 px-2 text-left text-gray-200">{{ $fieldvalue['value'] }}</div>
+                        <div class="table-cell my-1 px-2 text-left">{{ $fieldvalue['value'] }}</div>
                     </div>
                 @endif
             @endforeach
 
-            @if($method!='GET')
+            @if($method!='GET' && !empty($errors->toArray()))
                 <ul class="pl-8 my-5">
                     @foreach ($errors->toArray() as $name => $message)
                         <li class="text-left">{{ $name }} - {{ $message[0] }}</li>
@@ -42,5 +42,7 @@
         </div>
     @endif
 
-    <button type="submit" class="p-5 m-3 bg-zinc-800 w-full">{{$submit}}</button>
+    <div class="px-5">
+        <button type="submit" class="bg-blue-300 w-full h-[50px]">{{$submit}}</button>
+    </div>
 </form>

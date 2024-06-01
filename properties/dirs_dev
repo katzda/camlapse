@@ -1,2 +1,2 @@
-APP_ROOT_DIR=/var/apps/camlapse
-SECRETS_DIR=/var/apps/dev/camlapse/secrets
+APP_ROOT_DIR=/n/dev/camlapse
+SECRETS_DIR=/n/dev/environments/dev/camlapse/secrets

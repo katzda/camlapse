@@ -62,6 +62,7 @@
     :fields="$fields"
     method="GET"
     submit="Edit"
+    class="bg-gray-200"
 />
 
 @endsection

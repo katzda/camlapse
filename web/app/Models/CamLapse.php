@@ -37,4 +37,9 @@ class CamLapse extends Model
         $this->is_active = false;
         $this->save();
     }
+
+    public function activate(){
+        $this->is_active = true;
+        $this->save();
+    }
 }

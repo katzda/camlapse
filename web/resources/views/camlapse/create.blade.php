@@ -54,6 +54,7 @@
     id="new-timelapse"
     :fields="$fields"
     method="POST"
+    class="bg-gray-200"
 />
 
 @endsection
