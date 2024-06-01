@@ -41,7 +41,6 @@
                         submit="Activate"
                     />
                 @else
-                    Active
                     <x-form
                         action="{{route('camlapse.deactivate', ['camlapse' => $camlapse['id']])}}"
                         id="deactivate-camlapse"
