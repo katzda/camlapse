@@ -28,27 +28,45 @@
         ],
         'fph' => [
             'title' => 'fph',
-            'type' => 'text',
+            'type' => 'number',
             'value' => $camlapse->fph,
+            'other' => [
+                'min' => 1
+            ]
         ],
-        'between_hour_start' => [
-            'title' => 'Between hours start',
-            'type' => 'text',
-            'value' => $camlapse->between_hour_start,
+        'between_time_start' => [
+            'title' => 'Start time of day restriction',
+            'type' => 'time',
+            'value' => $camlapse->between_time_start,
         ],
-        'between_hour_end' => [
-            'title' => 'Between hours end',
-            'type' => 'text',
-            'value' => $camlapse->between_hour_end,
+        'between_time_end' => [
+            'title' => 'End time of day restriction',
+            'type' => 'time',
+            'value' => $camlapse->between_time_end,
         ],
-        'memory_period' => [
-            'title' => 'Memory period',
+        'cron_day' => [
+            'title' => 'Any particular day?',
             'type' => 'text',
-            'value' => $camlapse->memory_period,
+            'value' => $camlapse->cron_day,
+        ],
+        'cron_weekday' => [
+            'title' => 'Any particular weekday?',
+            'type' => 'text',
+            'value' => $camlapse->cron_weekday,
+        ],
+        'cron_month' => [
+            'title' => 'Any particular month?',
+            'type' => 'text',
+            'value' => $camlapse->cron_month,
+        ],
+        'cron_year' => [
+            'title' => 'Any particular year?',
+            'type' => 'text',
+            'value' => $camlapse->cron_year,
         ],
         'stop_datetime' => [
             'title' => 'Stop datetime',
-            'type' => 'text',
+            'type' => 'datetime-local',
             'value' => $camlapse->stop_datetime,
         ],
     ]

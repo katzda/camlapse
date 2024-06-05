@@ -16,9 +16,12 @@ return new class extends Migration
             $table->string('name', 255)->unique();
             $table->string('description')->default('');
             $table->Integer('fph');
-            $table->tinyInteger('between_hour_start')->nullable();
-            $table->tinyInteger('between_hour_end')->nullable();
-            $table->tinyInteger('memory_period')->nullable();//day/week/month/year
+            $table->time('between_time_start')->default('00:00');
+            $table->time('between_time_end')->default('23:59');
+            $table->string('cron_day')->default('*');
+            $table->string('cron_weekday')->default('*');
+            $table->string('cron_month')->default('*');
+            $table->string('cron_year')->default('*');
             $table->dateTime('stop_datetime')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamps();

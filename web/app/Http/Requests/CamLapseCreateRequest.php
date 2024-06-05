@@ -23,11 +23,14 @@ class CamLapseCreateRequest extends FormRequest
     {
         return [
             'name' => ['required','string','max:255','unique:camlapses'],
-            'description' => ['nullable','string'],
+            'description' => ['string'],
             'fph' => ['required','integer','min:1'],
-            'between_hour_start' => ['nullable', 'integer','min:0', 'max:24'],
-            'between_hour_end' => ['nullable', 'integer', 'min:0', 'max:24'],
-            'memory_period' => ['nullable', 'integer', 'min:1', 'max:4'],
+            'between_time_start' => ['date_format:H:i'],
+            'between_time_end' => ['date_format:H:i'],
+            'cron_day' => ['required', 'string'],
+            'cron_weekday' => ['required', 'string'],
+            'cron_month' => ['required', 'string'],
+            'cron_year' => ['required', 'string'],
             'stop_datetime' => ['nullable', 'date'],
         ];
     }

@@ -19,30 +19,65 @@
         'name' => [
             'title' => 'Name',
             'type' => 'text',
+            'required' => true,
+            'default' => '',
         ],
         'description' => [
             'title' => 'Description',
             'type' => 'text',
+            'required' => false,
+            'default' => '',
         ],
         'fph' => [
             'title' => 'fph',
-            'type' => 'text',
+            'type' => 'number',
+            'required' => true,
+            'default' => '1',
+            'other' => [
+                'min' => 1
+            ]
         ],
-        'between_hour_start' => [
-            'title' => 'Between hours start',
-            'type' => 'text',
+        'between_time_start' => [
+            'title' => 'Start time of day restriction',
+            'type' => 'time',
+            'required' => true,
+            'default' => '00:00',
         ],
-        'between_hour_end' => [
-            'title' => 'Between hours end',
-            'type' => 'text',
+        'between_time_end' => [
+            'title' => 'End time of day restriction',
+            'type' => 'time',
+            'required' => true,
+            'default' => '23:59',
         ],
-        'memory_period' => [
-            'title' => 'Memory period',
+        'cron_day' => [
+            'title' => 'Any particular day?',
             'type' => 'text',
+            'required' => true,
+            'default' => '*',
+        ],
+        'cron_weekday' => [
+            'title' => 'Any particular weekday?',
+            'type' => 'text',
+            'required' => true,
+            'default' => '*',
+        ],
+        'cron_month' => [
+            'title' => 'Any particular month?',
+            'type' => 'text',
+            'required' => true,
+            'default' => '*',
+        ],
+        'cron_year' => [
+            'title' => 'Any particular year?',
+            'type' => 'text',
+            'required' => true,
+            'default' => '*',
         ],
         'stop_datetime' => [
             'title' => 'Stop datetime',
-            'type' => 'text',
+            'type' => 'datetime-local',
+            'required' => false,
+            'default' => '',
         ],
     ]
 

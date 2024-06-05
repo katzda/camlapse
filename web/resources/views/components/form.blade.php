@@ -4,7 +4,10 @@
     $is_method_standard = $method == 'GET' || $method == 'POST';
 @endphp
 
-<form action="{{ $action }}" {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!} class="w-full text-center p-3 {{ $class }} rounded-lg">
+<form action="{{ $action }}" 
+    {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!} 
+    class="w-full text-center p-3 {{ $class }} rounded-lg"
+>
 
     @if(!$is_method_standard)
         @method($method)
@@ -20,9 +23,30 @@
             @foreach ($fields as $fieldkey => $fieldvalue)
                 @if($method != 'GET')
                     <div class="table-row leading-10">
-                        <label for="{{$id}}-{{$fieldkey}}" class="table-cell pr-3 text-right">{{ $fieldvalue['title']}}:</label>
-                        <input id="{{$id}}-{{$fieldkey}}" name="{{$fieldkey}}" type="{{$fieldvalue['type']}}" class="table-cell my-1 px-2 text-black" value="{{ old($fieldkey) ?? $fieldvalue['value'] ?? '' }}" />
-                        <span class="inline-block text-red-300 text-xl font-bold pl-3 w-2">@error($fieldkey)!@enderror</span>
+                        <label for="{{$id}}-{{$fieldkey}}" class="table-cell pr-3 text-right">
+                            {{ $fieldvalue['title']}}
+                        </label>
+
+                        <div class="w-full text-left">
+                            <input id="{{$id}}-{{$fieldkey}}" 
+                                name="{{$fieldkey}}" type="{{$fieldvalue['type']}}" 
+                                class="table-cell my-1 px-2 text-black" 
+                                {{ isset($fieldvalue['required']) && $fieldvalue['required'] ? 'required' : '' }}
+
+                                @if(isset($fieldvalue['other']))
+                                    @foreach ($fieldvalue['other'] as $otherkey => $othervalue)
+                                        {{ $otherkey . '='.$othervalue }}
+                                    @endforeach
+                                @endif
+
+                                value="{{ old($fieldkey) ?? $fieldvalue['value'] ?? $fieldvalue['default'] ?? '' }}" 
+                            />
+                            @if(isset($fieldvalue['required']) && $fieldvalue['required'])<span class="text-red-600">*</span>@endif
+
+                            <span class="inline-block text-red-600 text-xl font-bold pl-3 w-2">
+                                @error($fieldkey)!@enderror
+                            </span>
+                        </div>
                     </div>
                 @else
                     <div class="table-row leading-10">
@@ -35,7 +59,7 @@
             @if($method!='GET' && !empty($errors->toArray()))
                 <ul class="pl-8 my-5">
                     @foreach ($errors->toArray() as $name => $message)
-                        <li class="text-left">{{ $name }} - {{ $message[0] }}</li>
+                        <li class="text-left text-red-600">{{ $name }} - {{ $message[0] }}</li>
                     @endforeach
                 </ul>
             @endif

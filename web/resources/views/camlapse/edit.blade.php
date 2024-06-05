@@ -19,36 +19,64 @@
         'name' => [
             'title' => 'Name',
             'type' => 'text',
+            'required' => true,
             'value' => $camlapse->name,
         ],
         'description' => [
             'title' => 'Description',
             'type' => 'text',
-            'value' => $camlapse->description,
+            'required' => false,
+            'value' => $camlapse->description ?? '',
         ],
         'fph' => [
             'title' => 'fph',
-            'type' => 'text',
+            'type' => 'number',
+            'required' => true,
             'value' => $camlapse->fph,
+            'other' => [
+                'min' => 1
+            ]
         ],
-        'between_hour_start' => [
-            'title' => 'Between hours start',
-            'type' => 'text',
-            'value' => $camlapse->between_hour_start,
+        'between_time_start' => [
+            'title' => 'Start time of day restriction',
+            'type' => 'time',
+            'required' => true,
+            'value' => $camlapse->between_time_start,
         ],
-        'between_hour_end' => [
-            'title' => 'Between hours end',
-            'type' => 'text',
-            'value' => $camlapse->between_hour_end,
+        'between_time_end' => [
+            'title' => 'End time of day restriction',
+            'type' => 'time',
+            'required' => true,
+            'value' => $camlapse->between_time_end,
         ],
-        'memory_period' => [
-            'title' => 'Memory period',
+        'cron_day' => [
+            'title' => 'Any particular day?',
             'type' => 'text',
-            'value' => $camlapse->memory_period,
+            'required' => true,
+            'value' => $camlapse->cron_day,
+        ],
+        'cron_weekday' => [
+            'title' => 'Any particular weekday?',
+            'type' => 'text',
+            'required' => true,
+            'value' => $camlapse->cron_weekday,
+        ],
+        'cron_month' => [
+            'title' => 'Any particular month?',
+            'type' => 'text',
+            'required' => true,
+            'value' => $camlapse->cron_month,
+        ],
+        'cron_year' => [
+            'title' => 'Any particular year?',
+            'type' => 'text',
+            'required' => true,
+            'value' => $camlapse->cron_year,
         ],
         'stop_datetime' => [
             'title' => 'Stop datetime',
-            'type' => 'text',
+            'type' => 'datetime-local',
+            'required' => false,
             'value' => $camlapse->stop_datetime,
         ],
     ]
@@ -62,6 +90,7 @@
     method="PUT"
     :fields="$fields"
     submit="Save"
+    class="bg-gray-200"
 />
 
 <x-form
