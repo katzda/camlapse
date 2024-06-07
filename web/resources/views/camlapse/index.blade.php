@@ -19,12 +19,6 @@
             <x-tile>
                 <a href="{{ route('camlapse.show', ['camlapse' => $camlapse['id']]) }}">
                     <x-tile>
-                        {{-- fph
-                        between_hour_start
-                        between_hour_end
-                        memory_period
-                        stop_datetime --}}
-
                         <div>
                             <h2 class="text-4xl">{{$camlapse['name']}}<h2>
                             <span>{{ $camlapse['fph'] }} photoes / hour</span>

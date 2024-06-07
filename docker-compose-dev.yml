@@ -2,6 +2,7 @@ services:
   app:
     container_name: $WEB_HOST
     hostname: $WEB_HOST
+    privileged: true
     healthcheck:
       test: curl --fail --header 'Host:$URL' http://127.0.0.1 || exit 1
       interval: 10s

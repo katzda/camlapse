@@ -22,8 +22,8 @@
             'required' => true,
             'default' => '',
         ],
-        'description' => [
-            'title' => 'Description',
+        'purpose' => [
+            'title' => 'Purpose',
             'type' => 'text',
             'required' => false,
             'default' => '',
@@ -40,13 +40,13 @@
         'between_time_start' => [
             'title' => 'Start time of day restriction',
             'type' => 'time',
-            'required' => true,
+            'required' => false,
             'default' => '00:00',
         ],
         'between_time_end' => [
             'title' => 'End time of day restriction',
             'type' => 'time',
-            'required' => true,
+            'required' => false,
             'default' => '23:59',
         ],
         'cron_day' => [
@@ -54,24 +54,28 @@
             'type' => 'text',
             'required' => true,
             'default' => '*',
+            'info' => "Example: '*' | '1,12,31'"
         ],
         'cron_weekday' => [
             'title' => 'Any particular weekday?',
             'type' => 'text',
             'required' => true,
             'default' => '*',
+            'info' => "Example: '*' | '0,3,6'"
         ],
         'cron_month' => [
             'title' => 'Any particular month?',
             'type' => 'text',
             'required' => true,
             'default' => '*',
+            'info' => "Example: '*' | '0,3,11'"
         ],
         'cron_year' => [
             'title' => 'Any particular year?',
             'type' => 'text',
             'required' => true,
             'default' => '*',
+            'info' => "Example: '*' | '2023,2024'"
         ],
         'stop_datetime' => [
             'title' => 'Stop datetime',

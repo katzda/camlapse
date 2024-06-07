@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('camlapses', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->unique();
-            $table->string('description')->default('');
+            $table->string('purpose')->default('');
             $table->Integer('fph');
             $table->time('between_time_start')->default('00:00');
             $table->time('between_time_end')->default('23:59');

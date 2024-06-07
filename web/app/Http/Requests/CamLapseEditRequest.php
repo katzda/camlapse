@@ -25,7 +25,7 @@ class CamLapseEditRequest extends FormRequest
         return [
             'id' => ['required','integer','exists:camlapses,id'],
             'name' => ['required','string','max:255','unique:camlapses,id,'.$this->camlapse->id],
-            'description' => ['string'],
+            'purpose' => ['string'],
             'fph' => ['required','integer','min:1'],
             'between_time_start' => ['date_format:H:i'],
             'between_time_end' => ['date_format:H:i'],
@@ -43,7 +43,9 @@ class CamLapseEditRequest extends FormRequest
 
         $this->merge([
             'id' => $this->camlapse->id,
-            'description' => $this->description ?? ''
+            'purpose' => $this->purpose ?? '',
+            'between_time_start' => $this->between_time_start ?? '00:00',
+            'between_time_end' => $this->between_time_end ?? '23:59'
         ]);
     }
 }

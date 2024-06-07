@@ -23,7 +23,7 @@ class CamLapseCreateRequest extends FormRequest
     {
         return [
             'name' => ['required','string','max:255','unique:camlapses'],
-            'description' => ['string'],
+            'purpose' => ['string'],
             'fph' => ['required','integer','min:1'],
             'between_time_start' => ['date_format:H:i'],
             'between_time_end' => ['date_format:H:i'],
@@ -38,7 +38,9 @@ class CamLapseCreateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'description' => $this->description ?? ''
+            'purpose' => $this->purpose ?? '',
+            'between_time_start' => $this->between_time_start ?? '00:00',
+            'between_time_end' => $this->between_time_end ?? '23:59'
         ]);
     }
 }

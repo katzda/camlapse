@@ -16,15 +16,10 @@
 @php
 
     $fields = [
-        'name' => [
-            'title' => 'Name',
+        'purpose' => [
+            'title' => 'Purpose',
             'type' => 'text',
-            'value' => $camlapse->name,
-        ],
-        'description' => [
-            'title' => 'Description',
-            'type' => 'text',
-            'value' => $camlapse->description,
+            'value' => $camlapse->purpose,
         ],
         'fph' => [
             'title' => 'fph',
@@ -37,12 +32,12 @@
         'between_time_start' => [
             'title' => 'Start time of day restriction',
             'type' => 'time',
-            'value' => $camlapse->between_time_start,
+            'value' => $camlapse->between_time_start->format("H:i"),
         ],
         'between_time_end' => [
             'title' => 'End time of day restriction',
             'type' => 'time',
-            'value' => $camlapse->between_time_end,
+            'value' => $camlapse->between_time_end->format("H:i"),
         ],
         'cron_day' => [
             'title' => 'Any particular day?',
@@ -75,7 +70,7 @@
 
 <x-form
     action="{{ route('camlapse.edit', $camlapse->id) }}"
-    title="View this item"
+    title="{{ $camlapse->name }}"
     id="edit-timelapse"
     :fields="$fields"
     method="GET"

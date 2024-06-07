@@ -123,7 +123,7 @@ COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d
 COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
 RUN chmod 544 /usr/bin/entrypoint.sh;
 
-RUN apt-get update && apt-get install -y v4l-utils
+RUN apt-get update && apt-get install -y v4l-utils fswebcam
 
 ENV APP_DEBUG true
 ENTRYPOINT ["entrypoint.sh"]

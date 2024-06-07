@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
 while true; do
-    php artisan schedule:run
+    chmod 777 /dev/video*
+    php artisan app:snapshot
     sleep 1
 done
