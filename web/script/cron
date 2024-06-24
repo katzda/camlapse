@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 
+chmod 777 /dev/video*
+
 while true; do
-    chmod 777 /dev/video*
     php artisan app:snapshot
     sleep 60
 done
