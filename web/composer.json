@@ -4,6 +4,7 @@
     "description": "Capturing videos over long periods of time",
     "require": {
         "php": "^8.2",
+        "dragonmantank/cron-expression": "^3.3",
         "laravel/framework": "^11.0",
         "laravel/horizon": "^5.23",
         "laravel/tinker": "^2.9"

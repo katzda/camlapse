@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255)->unique();
             $table->string('purpose')->default('');
-            $table->Integer('fph');
             $table->time('between_time_start')->default('00:00');
             $table->time('between_time_end')->default('23:59');
-            $table->string('cron_day')->default('*');
-            $table->string('cron_weekday')->default('*');
-            $table->string('cron_month')->default('*');
-            $table->string('cron_year')->default('*');
             $table->dateTime('stop_datetime')->nullable();
             $table->boolean('is_active')->default(false);
+            $table->string('cron_min');
+            $table->string('cron_hour');
+            $table->string('cron_day')->default('*');
+            $table->string('cron_month')->default('*');
+            $table->string('cron_weekday')->default('*');
             $table->timestamps();
         });
     }

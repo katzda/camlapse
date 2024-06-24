@@ -13,85 +13,11 @@
 
 @section('content')
 
-@php
-
-    $fields = [
-        'name' => [
-            'title' => 'Name',
-            'type' => 'text',
-            'required' => true,
-            'default' => '',
-        ],
-        'purpose' => [
-            'title' => 'Purpose',
-            'type' => 'text',
-            'required' => false,
-            'default' => '',
-        ],
-        'fph' => [
-            'title' => 'fph',
-            'type' => 'number',
-            'required' => true,
-            'default' => '1',
-            'other' => [
-                'min' => 1
-            ]
-        ],
-        'between_time_start' => [
-            'title' => 'Start time of day restriction',
-            'type' => 'time',
-            'required' => false,
-            'default' => '00:00',
-        ],
-        'between_time_end' => [
-            'title' => 'End time of day restriction',
-            'type' => 'time',
-            'required' => false,
-            'default' => '23:59',
-        ],
-        'cron_day' => [
-            'title' => 'Any particular day?',
-            'type' => 'text',
-            'required' => true,
-            'default' => '*',
-            'info' => "Example: '*' | '1,12,31'"
-        ],
-        'cron_weekday' => [
-            'title' => 'Any particular weekday?',
-            'type' => 'text',
-            'required' => true,
-            'default' => '*',
-            'info' => "Example: '*' | '0,3,6'"
-        ],
-        'cron_month' => [
-            'title' => 'Any particular month?',
-            'type' => 'text',
-            'required' => true,
-            'default' => '*',
-            'info' => "Example: '*' | '0,3,11'"
-        ],
-        'cron_year' => [
-            'title' => 'Any particular year?',
-            'type' => 'text',
-            'required' => true,
-            'default' => '*',
-            'info' => "Example: '*' | '2023,2024'"
-        ],
-        'stop_datetime' => [
-            'title' => 'Stop datetime',
-            'type' => 'datetime-local',
-            'required' => false,
-            'default' => '',
-        ],
-    ]
-
-@endphp
-
 <x-form
     action="{{ route('camlapse.store') }}"
     title="Create a new time lapse!"
     id="new-timelapse"
-    :fields="$fields"
+    :fields="$camlapse->form"
     method="POST"
     class="bg-gray-200"
 />

@@ -23,7 +23,9 @@ class CamLapseController extends Controller
      */
     public function create()
     {
-        return View('camlapse.create');
+        return View('camlapse.create', [
+            'camlapse' => new CamLapse()
+        ]);
     }
 
     /**

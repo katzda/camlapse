@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use App\Models\CamLapse;
+use Cron\CronExpression;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,27 +33,13 @@ class TakeSnapshot extends Command
         $now = Carbon::now();
 
         foreach($camlapses as $index => $camlapse){
+            $cron = new CronExpression($camlapse->cron);
+            // 5 custom conditions
             if(!$camlapse->is_active){
                 continue;
             }
 
             if(!is_null($camlapse->stop_datetime) && $now->greaterThanOrEqualTo($camlapse->stop_datetime)){
-                continue;
-            }
-
-            if(!$this->isCron($camlapse->cron_year, $now, 'year')){
-                continue;
-            }
-
-            if(!$this->isCron($camlapse->cron_month, $now, 'month')){
-                continue;
-            }
-
-            if(!$this->isCron($camlapse->cron_weekday, $now, 'dayOfWeek')){
-                continue;
-            }
-
-            if(!$this->isCron($camlapse->cron_day, $now, 'day')){
                 continue;
             }
 
@@ -64,10 +51,7 @@ class TakeSnapshot extends Command
                 continue;
             }
 
-            $whichSecond = (int) (3600 / $camlapse->fph); //5 => 3600 / 5 => once every 720s
-            $nowSecond = $now->minute * 60 + $now->second;
-
-            if($nowSecond % $whichSecond != 0){
+            if(!$cron->isDue($now)){
                 continue;
             }
 
@@ -94,27 +78,14 @@ class TakeSnapshot extends Command
         // Define the temporary file path
         $file = '/' . str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
         $dir = 'images/'.$camlapse->id;
-        
+
         if (!Storage::exists($dir)) {
             Storage::makeDirectory($dir);
-        }       
-        
+        }
+
         // capture the image
         shell_exec("fswebcam ". Storage::path($dir.$file) ." -d " . $device);
 
         return true;
-    }
-
-    private function isCron(string $cron, Carbon $now, $carbonAttribute){
-        if($cron == '*'){
-            return true;
-        }
-        $days = explode(',', $cron);
-        foreach($days as $day){
-            if($day == $now->$carbonAttribute){
-                return true;
-            }
-        }
-        return false;
     }
 }

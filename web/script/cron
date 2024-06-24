@@ -3,5 +3,5 @@
 while true; do
     chmod 777 /dev/video*
     php artisan app:snapshot
-    sleep 1
+    sleep 60
 done
