@@ -33,7 +33,7 @@ class TakeSnapshot extends Command
         $now = Carbon::now();
 
         foreach($camlapses as $index => $camlapse){
-            $cron = new CronExpression($camlapse->cron);
+            $cron = new CronExpression($camlapse->cron); //https://github.com/dragonmantank/cron-expression
             // 5 custom conditions
             if(!$camlapse->is_active){
                 continue;
