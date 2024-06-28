@@ -77,42 +77,50 @@ class TakeSnapshot extends Command
         $device = trim($device);
 
         // Define the temporary file path
-        $file = '/' . str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
-        $dir = 'images/'.$camlapse->id."/photos/";
+        $dir = $camlapse->id."/photos";
 
-        if (!Storage::exists($dir)) {
-            Storage::makeDirectory($dir);
+        if (!is_dir(public_path($dir))) {
+            mkdir(public_path($dir), 0777, true);
         }
 
-        // capture the image
-        shell_exec("fswebcam ". Storage::path($dir.$file) ." -d " . $device);
+        $photo = '/' . str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
+
+        shell_exec("fswebcam ". public_path($dir.$photo) ." -d " . $device);
 
         return true;
     }
 
     private function updateVideo(CamLapse $camlapse) {
-        $baseDir = Storage::path("images/".$camlapse->id."/");
-        $photos = glob($baseDir . "photos/*.jpg", GLOB_BRACE);
-        $output_dir = $baseDir . "video/";
+        $baseDir = $camlapse->id;
 
-        if (!Storage::exists($output_dir)) {
-            Storage::makeDirectory($output_dir);
+        if (!is_dir(public_path($baseDir))) {
+            mkdir(public_path($baseDir), 0777, true);
         }
 
+        $photos = glob(public_path($baseDir . "/photos/*.jpg"), GLOB_BRACE);
         $total_images = count($photos);
         $video_length = 3;
-        $frame_rate = round($total_images / $video_length, 2);
+        $frame_rate = ceil($total_images / $video_length);
 
         # Generate the input file list for ffmpeg
         sort($photos);
-        $file_list = $baseDir . "filelist.txt";
+
+        $file_list = public_path($baseDir . "/filelist.txt");
+        $video_dir = public_path($baseDir);
+
+        if(file_exists($file_list)){
+            unlink($file_list);
+        }
+
+        touch($file_list);
+
         $handle = fopen($file_list, "w");
         foreach ($photos as $file) {
             fwrite($handle, "file '$file'\n");
         }
         fclose($handle);
 
-        shell_exec("ffmpeg -f concat -safe 0 -r $frame_rate -i $file_list -c:v libx264 -pix_fmt yuv420p $output_dir/video.mp4");
+        shell_exec("ffmpeg -f concat -safe 0 -r $frame_rate -i $file_list -c:v libx264 -pix_fmt yuv420p -y $video_dir/video.mp4");
         unlink($file_list);
     }
 }

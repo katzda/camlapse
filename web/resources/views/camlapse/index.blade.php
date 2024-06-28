@@ -13,19 +13,26 @@
 
 @section('content')
 
-    <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+    <div class="">
         @foreach ($all as $camlapse)
 
             <x-tile>
-                <a href="{{ route('camlapse.show', ['camlapse' => $camlapse['id']]) }}">
-                    <x-tile>
+                <x-tile>
+
+                    <a href="{{ route('camlapse.show', ['camlapse' => $camlapse['id']]) }}">
                         <div>
                             <h2 class="text-4xl">{{$camlapse['name']}}<h2>
                             <span>{{ $camlapse['fph'] }} photoes / hour</span>
                         </div>
                         <x-arrow-r />
-                    </x-tile>
-                </a>
+                    </a>
+
+                    <video width="640" height="360" controls>
+                        <source src="{{ asset($camlapse['id'].'/video.mp4') }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+                </x-tile>
 
                 @if(!$camlapse['is_active'])
                     <x-form
