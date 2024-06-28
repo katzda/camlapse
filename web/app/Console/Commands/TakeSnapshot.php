@@ -22,7 +22,7 @@ class TakeSnapshot extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Check timelapse crons and take due snapshots';
 
     /**
      * Execute the console command.
@@ -87,5 +87,43 @@ class TakeSnapshot extends Command
         shell_exec("fswebcam ". Storage::path($dir.$file) ." -d " . $device);
 
         return true;
+    }
+
+    private function updateVideo(CamLapse $camlapse, Carbon $now) {
+        # Directory containing the images
+        $directory = Storage::path("images/".$camlapse->id."/");
+
+        # Get all jpg files and sort them
+        $files = glob($directory . "*.jpg", GLOB_BRACE);
+        sort($files);
+
+        # Count the total number of images
+        $total_images = count($files);
+
+        # Desired video length in seconds
+        $video_length = 3;
+
+        # Calculate frame rate
+        $frame_rate = round($total_images / $video_length, 2);
+
+        # Generate the input file list for ffmpeg
+        $file_list = $directory . "filelist.txt";
+        $handle = fopen($file_list, "w");
+
+        foreach ($files as $file) {
+            fwrite($handle, "file '$file'\n");
+        }
+
+        fclose($handle);
+
+        # Path to the output video file
+        $output_file = $directory . "video.mp4";
+
+        # Execute the ffmpeg command
+        $command = "ffmpeg -f concat -safe 0 -r $frame_rate -i $file_list -c:v libx264 -pix_fmt yuv420p $output_file";
+        shell_exec($command);
+
+        # Optionally, clean up the file list
+        unlink($file_list);
     }
 }

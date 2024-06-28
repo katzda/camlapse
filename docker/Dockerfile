@@ -71,6 +71,10 @@ USER developer
 RUN mkdir       /var/www/mybusinesswebdir; \
     chmod 775   /var/www/mybusinesswebdir;
 
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
 USER root
 
 WORKDIR /var/www/mybusinesswebdir
@@ -97,24 +101,6 @@ RUN cd /home/developer; \
     apt-get -y autoremove; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
-
-# xdebug
-RUN apt-get update && apt-get install -y php8.3-xdebug
-
-# ARG HOST_IP
-# RUN echo "zend_extension=/usr/lib/php/20220829/xdebug.so\n \
-# #         xdebug.var_display_max_depth=10\n \
-# #         xdebug.var_display_max_children=256\n \
-# #         xdebug.var_display_max_data=1024\n \
-# #         xdebug.force_display_errors=on\n \
-# #         xdebug.remote_timeout=50\n \
-# #         xdebug.remote_log=/var/www/barbershop.com/xdebug.log \n \
-# #         xdebug.remote_log_level=9\n \
-# #         xdebug.remote_connect_back=on\n \
-#          xdebug.remote_enable=on\n \
-#          xdebug.remote_host=$HOST_IP\n \
-#          xdebug.remote_autostart=on \n \
-#          xdebug.remote_port=9900" > /etc/php/8.3/mods-available/xdebug.ini;
 
 #REPEATED SECTION FROM HERE
 USER root

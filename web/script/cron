@@ -2,7 +2,4 @@
 
 chmod 777 /dev/video*
 
-while true; do
-    php artisan app:snapshot
-    sleep 60
-done
+php artisan schedule:work
