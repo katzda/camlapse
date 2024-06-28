@@ -5,10 +5,8 @@ COMPOSER_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
 cd $COMPOSER_FILE_DIR;
 COMPOSER_FILE_DIR=$(pwd)
 
-echo "Running './npm $*'"
-
 set -a  # begin exporting all constants automatically
-. ./properties/constants true $@;
+. ./properties/constants;
 set +a  # stop exporting all constants automatically
 
 docker compose -f "$DOCKER_COMPOSE_FILE" exec -it -u developer app npm "${@:1}"

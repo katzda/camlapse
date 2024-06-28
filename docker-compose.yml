@@ -11,7 +11,7 @@ services:
     build:
       context: "."
       dockerfile: docker/Dockerfile
-      target: dev
+      target: $TARGET
       args:
         - URL_PROD
         - URL_QA

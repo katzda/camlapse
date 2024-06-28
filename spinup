@@ -6,10 +6,8 @@ INSTALL_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
 cd $INSTALL_FILE_DIR;
 INSTALL_FILE_DIR=$(pwd)
 
-echo "Running './spinup $*'"
-
 set -a  # begin exporting all constants automatically
-. ./properties/constants true $@;
+. ./properties/constants $@;
 set +a  # stop exporting all constants automatically
 
 if [ -f "./$DOCKER_COMPOSE_FILE" ]; then

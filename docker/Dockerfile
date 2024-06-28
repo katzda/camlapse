@@ -72,9 +72,8 @@ RUN apt-get update && apt-get install -y supervisor; \
     sed -i -E "s/(\[supervisord\])/\1\nuser=root/;s/(logfile=).*/\1\/var\/log\/supervisor\/supervisord.log/" /etc/supervisor/supervisord.conf; \
     mkdir -p /home/developer/supervisor;
 
-RUN chown developer $BASE_DIR;
-USER developer
-RUN mkdir       $BASE_DIR; \
+RUN mkdir -p $BASE_DIR; \
+    chown developer:developer $BASE_DIR; \
     chmod 775   $BASE_DIR;
 
 USER root
@@ -135,12 +134,7 @@ ENTRYPOINT ["entrypoint.sh"]
 ###################
 FROM dev as build
 
-ARG BASE_DIR=/srv
-COPY . $BASE_DIR/
-
-RUN chown -R developer $BASE_DIR; \
-    chgrp -R developer $BASE_DIR; \
-    cd $BASE_DIR;
+COPY web/* $BASE_DIR/
 
 USER developer
 
@@ -155,9 +149,8 @@ RUN mkdir -p \
 # route:clear because caching causes 500 server error
 RUN composer install --no-dev --no-interaction --optimize-autoloader; \
     npm install; \
-    npm run prod; \
-    composer dump-autoload; \
-    php artisan livewire:publish --assets;
+    npm run dev; \
+    composer dump-autoload;
 
 ########
 # PROD #
