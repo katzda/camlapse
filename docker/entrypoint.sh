@@ -28,22 +28,6 @@ gosu developer mkdir -p \
   storage/framework/testing \
   storage/framework/views;
 
-# mkdir -p \
-#   /var/log/supervisor \
-#   /var/log/apache2;
-
-# # the following worked
-# echo "" > /var/log/supervisor/horizon.log
-# echo "" > /var/log/supervisor/supervisord.log
-# echo "" > /var/log/apache2/error.log
-# echo "" > /home/developer/web_error.log
-# echo "" > /home/developer/web_transfer.log
-
-# # the following appeared empty
-# echo "" > /var/log/supervisor/apache2d.log #this was empty!?
-# echo "" > /var/log/apache2/access.log #this was empty!?
-# echo "" > /var/log/apache2/other_vhosts_access.log #this was empty!?
-
 set -a
 gosu developer cp /run/secrets/env &BASE_DIR&/.env;
 

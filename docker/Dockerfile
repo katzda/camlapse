@@ -76,17 +76,6 @@ RUN mkdir -p $BASE_DIR; \
     chown developer:developer $BASE_DIR; \
     chmod 775   $BASE_DIR;
 
-USER root
-
-COPY ./docker/entrypoint.sh /usr/bin/entrypoint.sh
-COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d.conf
-COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
-RUN chmod 544 /usr/bin/entrypoint.sh;
-
-RUN sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /usr/bin/entrypoint.sh; \
-    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/apache2d.conf; \
-    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/cron.conf;
-
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     v4l-utils \
@@ -124,6 +113,15 @@ RUN cd /home/developer; \
 
 #REPEATED SECTION FROM HERE
 USER root
+
+COPY ./docker/entrypoint.sh /usr/bin/entrypoint.sh
+COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d.conf
+COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
+RUN chmod 544 /usr/bin/entrypoint.sh;
+
+RUN sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /usr/bin/entrypoint.sh; \
+    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/apache2d.conf; \
+    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/cron.conf;
 
 ENV APP_DEBUG true
 ENTRYPOINT ["entrypoint.sh"]
@@ -165,7 +163,18 @@ USER root
 RUN chmod 775 $BASE_DIR;
 
 #REPEATED SECTION FROM HERE
-ENV APP_DEBUG false
+USER root
+
+COPY ./docker/entrypoint.sh /usr/bin/entrypoint.sh
+COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d.conf
+COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
+RUN chmod 544 /usr/bin/entrypoint.sh;
+
+RUN sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /usr/bin/entrypoint.sh; \
+    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/apache2d.conf; \
+    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/cron.conf;
+
+ENV APP_DEBUG true
 ENTRYPOINT ["entrypoint.sh"]
 #REPEATED SECTION ENDS HERE
 
