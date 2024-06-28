@@ -77,7 +77,7 @@ class TakeSnapshot extends Command
         $device = trim($device);
 
         // Define the temporary file path
-        $dir = $camlapse->id."/photos";
+        $dir = 'timelapse/'.$camlapse->id."/photos";
 
         if (!is_dir(public_path($dir))) {
             mkdir(public_path($dir), 0777, true);
@@ -91,7 +91,7 @@ class TakeSnapshot extends Command
     }
 
     private function updateVideo(CamLapse $camlapse) {
-        $baseDir = $camlapse->id;
+        $baseDir = 'timelapse/'.$camlapse->id;
 
         if (!is_dir(public_path($baseDir))) {
             mkdir(public_path($baseDir), 0777, true);
