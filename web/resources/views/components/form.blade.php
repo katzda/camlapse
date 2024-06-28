@@ -4,8 +4,8 @@
     $is_method_standard = $method == 'GET' || $method == 'POST';
 @endphp
 
-<form action="{{ $action }}" 
-    {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!} 
+<form action="{{ $action }}"
+    {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!}
     class="w-full text-center p-3 {{ $class }} rounded-lg"
 >
 
@@ -28,9 +28,9 @@
                         </label>
 
                         <div class="w-full text-left">
-                            <input id="{{$id}}-{{$fieldkey}}" 
-                                name="{{$fieldkey}}" type="{{$fieldvalue['type']}}" 
-                                class="table-cell my-1 px-2 text-black" 
+                            <input id="{{$id}}-{{$fieldkey}}"
+                                name="{{$fieldkey}}" type="{{$fieldvalue['type']}}"
+                                class="table-cell my-1 px-2 text-black"
                                 {{ isset($fieldvalue['required']) && $fieldvalue['required'] ? 'required' : '' }}
 
                                 @if(isset($fieldvalue['other']))
@@ -39,7 +39,7 @@
                                     @endforeach
                                 @endif
 
-                                value="{{ old($fieldkey) ?? $fieldvalue['value'] ?? $fieldvalue['default'] ?? '' }}" 
+                                value="{{ old($fieldkey) ?? $fieldvalue['value'] ?? $fieldvalue['default'] ?? '' }}"
                             />
                             @if(isset($fieldvalue['required']) && $fieldvalue['required'])<span class="text-red-600">*</span>@endif
 
