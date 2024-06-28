@@ -63,7 +63,7 @@ fi;
 # lowercase
 env="$(echo "$ENV" | tr '[A-Z]' '[a-z]')"
 
-DOCKER_BUILDKIT=1
+DOCKER_BUILDKIT=""
 COMPOSE_IGNORE_ORPHANS=true;
 
 WEB_HOST=camlapse_$env

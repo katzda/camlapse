@@ -78,7 +78,7 @@ class TakeSnapshot extends Command
 
         // Define the temporary file path
         $file = '/' . str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
-        $dir = 'images/'.$camlapse->id."/photos";
+        $dir = 'images/'.$camlapse->id."/photos/";
 
         if (!Storage::exists($dir)) {
             Storage::makeDirectory($dir);

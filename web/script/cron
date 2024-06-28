@@ -1,5 +1,3 @@
 #!/usr/bin/bash
 
-chmod 777 /dev/video*
-
 php artisan schedule:work

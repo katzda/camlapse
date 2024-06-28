@@ -3,23 +3,26 @@
 ###################
 FROM ubuntu:20.04 as base
 
-#temporarily install curl
+# install curl
 RUN apt-get update && apt-get install -y curl gosu;
 RUN ln -snf /usr/share/zoneinfo/$(curl https://ipapi.co/timezone -s) /etc/localtime;
 
-# user
-RUN groupadd developer; \
-    useradd developer -m -g developer; \
-    umask 002 \
-    echo umask 002 >> /home/developer/.bashrc
+ARG UID
+ARG GID
+ENV UID=$UID
+ENV GID=$GID
+
+RUN groupadd -g $GID developer; \
+    useradd -u $UID -m developer -g $GID; \
+    umask 002; \
+    echo "umask 002" >> /home/developer/.bashrc;
 
 #php 8.3
 RUN apt-get update && apt-get install -y \
     lsb-release ca-certificates apt-transport-https software-properties-common -y; \
     add-apt-repository ppa:ondrej/php; \
     apt-get update && apt-get install -y \
-    php8.3 libapache2-mod-php8.3 \
-    php-redis \
+    php8.3 \
     php8.3-cli \
     php8.3-curl \
     php8.3-common \
@@ -36,48 +39,64 @@ RUN apt-get update && apt-get install -y \
     php8.3-imap \
     php8.3-msgpack \
     php8.3-gd \
-    php8.3-zmq; \
-    apt-get -y autoremove; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
+    php8.3-zmq \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
 
-# apache2
-RUN apt-get update && apt-get install -y apache2; \
-    rm -rf /var/www/html; \
-    a2dissite 000-default.conf; \
-    rm /etc/apache2/sites-available/*;
-
+ARG BASE_DIR="/srv"
+ARG BASE_DIR_E="\/srv"
 ARG URL_PROD
 ARG URL_QA
 ARG URL_DEV
 ARG OWNERS_EMAIL
 
-USER root
-COPY ./docker/artifacts/web.conf /etc/apache2/sites-available/$URL_PROD.conf
-RUN sed -i "s/&URL_PROD&/$URL_PROD/g;s/&URL_QA&/$URL_QA/g;s/&URL_DEV&/$URL_DEV/g;s/&OWNERS_EMAIL&/$OWNERS_EMAIL/g;" /etc/apache2/sites-available/$URL_PROD.conf; \
+RUN mkdir -p $BASE_DIR;
+
+# apache2
+RUN apt-get update && apt-get install -y apache2; \
+    a2dissite 000-default.conf; \
+    rm /etc/apache2/sites-available/*;
+
+COPY ./docker/artifacts/apache/url.conf /etc/apache2/sites-available/$URL_PROD.conf
+COPY ./docker/artifacts/apache/apache2.conf /etc/apache2/apache2.conf
+RUN sed -i "s/&BASE_DIR&/$BASE_DIR_E/;s/&URL_PROD&/$URL_PROD/g;s/&URL_QA&/$URL_QA/g;s/&URL_DEV&/$URL_DEV/g;s/&OWNERS_EMAIL&/$OWNERS_EMAIL/g;" /etc/apache2/sites-available/$URL_PROD.conf; \
     sed -i -E  "s/(export APACHE_RUN_USER=)(.*$)/\1developer/;s/(export APACHE_RUN_GROUP=)(.*$)/\1developer/" /etc/apache2/envvars; \
-    sed -i -E  "s/#(ServerRoot .*)$/\1\nServerName $URL_PROD/;s/(ErrorLog ).*$/\1\/var\/log\/apache2\/error.log/;" /etc/apache2/apache2.conf; \
+    sed -i -E  "s/&ServerName&$/$URL_PROD/;s/&BASE_DIR&/$BASE_DIR_E/;" /etc/apache2/apache2.conf; \
     a2enmod rewrite; \
     a2enmod ssl; \
     a2ensite $URL_PROD.conf;
 
 #supervisor
 RUN apt-get update && apt-get install -y supervisor; \
-    sed -i -E 's/(\[supervisord\])/\1\nuser=root/;s/(logfile=).*/\1\/var\/log\/supervisor\/supervisord.log/' /etc/supervisor/supervisord.conf; \
+    sed -i -E "s/(\[supervisord\])/\1\nuser=root/;s/(logfile=).*/\1\/var\/log\/supervisor\/supervisord.log/" /etc/supervisor/supervisord.conf; \
     mkdir -p /home/developer/supervisor;
 
-RUN chown developer /var/www/;
+RUN chown developer $BASE_DIR;
 USER developer
-RUN mkdir       /var/www/mybusinesswebdir; \
-    chmod 775   /var/www/mybusinesswebdir;
-
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+RUN mkdir       $BASE_DIR; \
+    chmod 775   $BASE_DIR;
 
 USER root
 
-WORKDIR /var/www/mybusinesswebdir
+COPY ./docker/entrypoint.sh /usr/bin/entrypoint.sh
+COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d.conf
+COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
+RUN chmod 544 /usr/bin/entrypoint.sh;
+
+RUN sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /usr/bin/entrypoint.sh; \
+    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/apache2d.conf; \
+    sed -i -E "s/&BASE_DIR&/$BASE_DIR_E/;" /etc/supervisor/conf.d/cron.conf;
+
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    v4l-utils \
+    fswebcam; \
+    apt-get -y autoremove; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
+
+WORKDIR $BASE_DIR
 
 CMD ["/usr/bin/supervisord"]
 
@@ -85,6 +104,8 @@ CMD ["/usr/bin/supervisord"]
 # DEV             #
 ###################
 FROM base as dev
+
+# ARG BASE_DIR=/srv
 
 RUN apt-get update && apt-get install -y \
     nano vim unzip iputils-ping silversearcher-ag net-tools netcat npm; \
@@ -104,12 +125,6 @@ RUN cd /home/developer; \
 
 #REPEATED SECTION FROM HERE
 USER root
-COPY ./docker/entrypoint.sh /usr/bin/entrypoint.sh
-COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d.conf
-COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
-RUN chmod 544 /usr/bin/entrypoint.sh;
-
-RUN apt-get update && apt-get install -y v4l-utils fswebcam
 
 ENV APP_DEBUG true
 ENTRYPOINT ["entrypoint.sh"]
@@ -120,11 +135,12 @@ ENTRYPOINT ["entrypoint.sh"]
 ###################
 FROM dev as build
 
-COPY . /var/www/mybusinesswebdir/
+ARG BASE_DIR=/srv
+COPY . $BASE_DIR/
 
-RUN chown -R developer /var/www/mybusinesswebdir; \
-    chgrp -R developer /var/www/mybusinesswebdir; \
-    cd /var/www/mybusinesswebdir;
+RUN chown -R developer $BASE_DIR; \
+    chgrp -R developer $BASE_DIR; \
+    cd $BASE_DIR;
 
 USER developer
 
@@ -141,7 +157,6 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader; \
     npm install; \
     npm run prod; \
     composer dump-autoload; \
-    # php artisan horizon:publish; \
     php artisan livewire:publish --assets;
 
 ########
@@ -149,26 +164,14 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader; \
 ########
 FROM base as prod
 
+ARG BASE_DIR=/srv
 USER developer
-COPY --from=build /var/www/mybusinesswebdir /var/www/mybusinesswebdir
+COPY --from=build $BASE_DIR $BASE_DIR
 
 USER root
-RUN chmod 775 /var/www/mybusinesswebdir;
-    # cd /var/www/mybusinesswebdir; \
-    # find . -type d -exec chmod 755 -- {} +; \
-    # # these are restrected only because it otherwise takes forever. But I could enable it for prod but maybe not for QA
-    # find . -not -path "*/node_modules/*" -not -path "*/vendor/*" -type f -exec chmod 444 -- {} +; \
-    # find storage -type f -exec chmod 664 -- {} +; \
-    # find storage -type d -exec chmod 775 -- {} +; \
-    # find bootstrap/cache -type f -exec chmod 664 -- {} +; \
-    # find bootstrap/cache -type d -exec chmod 775 -- {} +;
+RUN chmod 775 $BASE_DIR;
 
 #REPEATED SECTION FROM HERE
-COPY ./docker/entrypoint.sh /usr/bin/entrypoint.sh
-COPY ./docker/artifacts/supervisor/apache2d.conf /etc/supervisor/conf.d/apache2d.conf
-COPY ./docker/artifacts/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
-RUN chmod 544 /usr/bin/entrypoint.sh;
-
 ENV APP_DEBUG false
 ENTRYPOINT ["entrypoint.sh"]
 #REPEATED SECTION ENDS HERE

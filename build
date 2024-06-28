@@ -6,6 +6,9 @@ BUILD_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
 cd $BUILD_FILE_DIR;
 BUILD_FILE_DIR=$(pwd)
 
+export UID=$(id -u)
+export GID=$(id -g)
+
 echo "Running './build $*'"
 
 set -a  # begin exporting all constants automatically

@@ -20,7 +20,6 @@
                 <a href="{{ route('camlapse.show', ['camlapse' => $camlapse['id']]) }}">
                     <x-tile>
                         <div>
-                            <a href="https://stackoverflow.com/questions/17265429/add-2-pictures-to-video-with-durations?noredirect=1&lq=1">TODO</a>
                             <h2 class="text-4xl">{{$camlapse['name']}}<h2>
                             <span>{{ $camlapse['fph'] }} photoes / hour</span>
                         </div>

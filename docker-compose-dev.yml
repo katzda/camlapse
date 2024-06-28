@@ -17,18 +17,18 @@ services:
         - URL_QA
         - URL_DEV
         - OWNERS_EMAIL
+        - UID
+        - GID
     environment:
       - URL
       - URL_PROD
-      - USER_ID
-      - GROUP_ID
       - APP_NAME
       - APP_ENV
       - OWNERS_EMAIL
     secrets:
       - env
     volumes:
-      - $APP_ROOT_DIR/web:/var/www/mybusinesswebdir
+      - $APP_ROOT_DIR/web:/srv
     networks:
       backend:
     ports:

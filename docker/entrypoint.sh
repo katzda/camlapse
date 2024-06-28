@@ -1,13 +1,7 @@
 #!/bin/bash
 
-#group id needs to be the same as host
-groupmod -g $GROUP_ID developer
-# lets also make UID the same as host
-usermod -u $USER_ID developer
-
-# all users must belong to the developer group
-usermod -aG developer developer
-usermod -aG developer www-data
+chgrp developer /dev/video*; \
+chmod 775 /dev/video*;
 
 # dockerfile, esp for prod, might have created all laravel files with default uid gid, so I need to check and update them
 CURR_OWN=$(ls -ld ./storage | awk '{print $3}');
@@ -51,7 +45,7 @@ gosu developer mkdir -p \
 # echo "" > /var/log/apache2/other_vhosts_access.log #this was empty!?
 
 set -a
-gosu developer cp /run/secrets/env /var/www/mybusinesswebdir/.env;
+gosu developer cp /run/secrets/env &BASE_DIR&/.env;
 
 # some of these can't be in dockerfile probably because of .env values being cached too early
 gosu developer php artisan config:clear;
