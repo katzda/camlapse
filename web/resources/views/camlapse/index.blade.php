@@ -26,7 +26,7 @@
                 </a>
 
                 <video controls class="mx-auto">
-                    <source src="{{ asset($camlapse['id'].'/video.mp4') }}" type="video/mp4">
+                    <source src="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4') }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
 
