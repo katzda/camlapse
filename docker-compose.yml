@@ -1,44 +1,22 @@
 services:
-  app:
-    container_name: $WEB_HOST
-    hostname: $WEB_HOST
-    privileged: true
-    healthcheck:
-      test: curl --fail --header 'Host:$URL' http://127.0.0.1 || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    build:
-      context: "."
-      dockerfile: docker/Dockerfile
-      target: $TARGET
-      args:
-        - URL_PROD
-        - URL_QA
-        - URL_DEV
-        - OWNERS_EMAIL
-        - UID
-        - GID
-    environment:
-      - URL
-      - URL_PROD
-      - APP_NAME
-      - APP_ENV
-      - OWNERS_EMAIL
-    secrets:
-      - env
-    volumes:
-      - $APP_ROOT_DIR/web:/srv
-    networks:
-      backend:
-    ports:
-      - 80:80
-      - 5173:5173
-
-secrets:
-  env:
-    file: $SECRETS_DIR/.env
-
-networks:
-  backend:
-    name: $URL
+    app:
+        container_name: camlapse
+        hostname: camlapse
+        privileged: true
+        healthcheck:
+            test: curl --fail --header 'Host:camlapse.world' http://127.0.0.1 || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        build:
+            context: "."
+            dockerfile: docker/Dockerfile
+            args:
+                - UID
+                - GID
+        volumes:
+            - .:/srv
+        ports:
+            - 80:80
+        expose:
+            - 9000

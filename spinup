@@ -6,18 +6,7 @@ INSTALL_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
 cd $INSTALL_FILE_DIR;
 INSTALL_FILE_DIR=$(pwd)
 
-set -a  # begin exporting all constants automatically
-. ./properties/constants $@;
-set +a  # stop exporting all constants automatically
-
-if [ -f "./$DOCKER_COMPOSE_FILE" ]; then
-    [[ $VOLUMES = "true" ]] && options+=" --volumes";
-
-    docker compose -f "$DOCKER_COMPOSE_FILE" down ${options[@]};
-    [[ $VOLUMES = true ]] && docker volume rm $(docker volume ls -qf dangling=true) 2>/dev/null
-
-    docker compose -f "$DOCKER_COMPOSE_FILE" up --force-recreate -d --no-build;
-fi;
-echo "$DOCKER_COMPOSE_FILE";
+docker compose -f docker-compose.yml down ${options[@]};
+docker compose -f docker-compose.yml up --force-recreate -d --no-build;
 
 cd $INSTALL_FILE_PREV_DIR;

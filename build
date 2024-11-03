@@ -6,10 +6,9 @@ BUILD_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
 cd $BUILD_FILE_DIR;
 BUILD_FILE_DIR=$(pwd)
 
-set -a  # begin exporting all constants automatically
-. ./properties/constants $@;
-set +a  # stop exporting all constants automatically
+export UID=$(id -u)
+export GID=$(id -g)
 
-docker compose -f "$DOCKER_COMPOSE_FILE" build $QA_OPTIONS;
+docker compose -f "docker-compose.yml" build;
 
 cd $BUILD_FILE_PREV_DIR;
