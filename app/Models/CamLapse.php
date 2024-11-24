@@ -10,11 +10,13 @@ class CamLapse extends Model
 {
     use HasFactory;
 
-    protected $table="camlapses";
+    protected $table = "camlapses";
 
     protected $fillable = [
         'name',
+        'camera_id',
         'purpose',
+        'video_fps',
         'between_time_start',
         'between_time_end',
         'stop_datetime',
@@ -25,13 +27,14 @@ class CamLapse extends Model
         'cron_month',
     ];
 
-    public function getCronAttribute() : string
+    public function getCronAttribute(): string
     {
-        return sprintf("%s %s %s %s %s",
+        return sprintf(
+            "%s %s %s %s %s",
             $this->cron_min ?? '*',    // min (0 - 59)
             $this->cron_hour ?? '*',   // hour (0 - 23)
             $this->cron_day ?? '*',    // day of month (1 - 31)
-            $this->cron_weekday ?? '*',// month (1 - 12)
+            $this->cron_weekday ?? '*', // month (1 - 12)
             $this->cron_month ?? '*',  // day of week (0 - 7) (Sunday=0 or 7)
         );
     }
@@ -45,29 +48,34 @@ class CamLapse extends Model
     {
         return [
             'stop_datetime' => 'datetime:Y-m-dTH:i',
+            'video_fps' => 'integer',
             'between_time_start' => 'datetime:H:i',
             'between_time_end' => 'datetime:H:i',
         ];
     }
 
-    public static function deactivateAll(){
+    public static function deactivateAll()
+    {
         CamLapse::where('is_active', true)
             ->update([
                 'is_active' => false
             ]);
     }
 
-    public function deactivate(){
+    public function deactivate()
+    {
         $this->is_active = false;
         $this->save();
     }
 
-    public function activate(){
+    public function activate()
+    {
         $this->is_active = true;
         $this->save();
     }
 
-    public function getFormAttribute(){
+    public function getFormAttribute()
+    {
         return [
             'name' => [
                 'title' => 'Name',
@@ -82,6 +90,22 @@ class CamLapse extends Model
                 'required' => false,
                 'default' => '',
                 'value' => $this->purpose ?? '',
+            ],
+            'camera_id' => [
+                'type' => 'select',
+                'source' => 'devices',
+                'source_index_name' => 'id',
+                'source_display_name' => 'name',
+                'title' => 'Select Camera',
+                'required' => true,
+                'value' => $this->camera_id ?? '',
+            ],
+            'video_fps' => [
+                'title' => 'Video FPS',
+                'type' => 'number',
+                'required' => true,
+                'default' => '2',
+                'value' => $this->video_fps ?? 2,
             ],
             'between_time_start' => [
                 'title' => 'Start time of day restriction',

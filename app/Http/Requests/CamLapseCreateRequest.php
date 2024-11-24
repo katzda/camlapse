@@ -16,6 +16,7 @@ class CamLapseCreateRequest extends FormRequest
         return [
             'name' => ['required','string','max:255','unique:camlapses'],
             'purpose' => ['string'],
+            'camera_id' => ['integer', 'required', 'exists:camera,id'],
             'between_time_start' => ['date_format:H:i'],
             'between_time_end' => ['date_format:H:i'],
             'stop_datetime' => ['nullable', 'date'],

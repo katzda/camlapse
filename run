@@ -1,14 +1,6 @@
 #!/bin/bash
 
-COMPOSER_FILE_PREV_DIR=$(pwd)
-COMPOSER_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
-cd $COMPOSER_FILE_DIR;
-COMPOSER_FILE_DIR=$(pwd)
+export USERID=$(id -u)
+export GID=$(id -g)
 
-set -a  # begin exporting all constants automatically
-. ./properties/constants;
-set +a  # stop exporting all constants automatically
-
-docker compose -f "$DOCKER_COMPOSE_FILE" exec app "${@:1}"
-
-cd $COMPOSER_FILE_PREV_DIR;
+docker compose -f docker-compose.yml "${@:1}"

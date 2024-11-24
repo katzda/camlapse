@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CamLapse;
 use App\Http\Requests\CamLapseEditRequest;
 use App\Http\Requests\CamLapseCreateRequest;
+use App\Models\CameraDevice;
 
 class CamLapseController extends Controller
 {
@@ -24,7 +25,8 @@ class CamLapseController extends Controller
     public function create()
     {
         return View('camlapse.create', [
-            'camlapse' => new CamLapse()
+            'camlapse' => new CamLapse(),
+            'devices' => CameraDevice::all(),
         ]);
     }
 
@@ -56,7 +58,8 @@ class CamLapseController extends Controller
     public function edit(CamLapse $camlapse)
     {
         return View('camlapse.edit', [
-            'camlapse' => $camlapse
+            'camlapse' => $camlapse,
+            'devices' => CameraDevice::all(),
         ]);
     }
 
@@ -81,13 +84,15 @@ class CamLapseController extends Controller
         return redirect(route('camlapse.index'));
     }
 
-    public function activate(CamLapse $camlapse){
+    public function activate(CamLapse $camlapse)
+    {
         CamLapse::deactivateAll();
         $camlapse->activate();
         return redirect(route('camlapse.index'));
     }
 
-    public function deactivate(CamLapse $camlapse){
+    public function deactivate(CamLapse $camlapse)
+    {
         $camlapse->deactivate();
         return redirect(route('camlapse.index'));
     }

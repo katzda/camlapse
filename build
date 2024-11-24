@@ -1,14 +1,3 @@
 #!/bin/bash
 
-# make current script invokable from any directory
-BUILD_FILE_PREV_DIR=$(pwd)
-BUILD_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
-cd $BUILD_FILE_DIR;
-BUILD_FILE_DIR=$(pwd)
-
-export UID=$(id -u)
-export GID=$(id -g)
-
-docker compose -f "docker-compose.yml" build;
-
-cd $BUILD_FILE_PREV_DIR;
+./run build

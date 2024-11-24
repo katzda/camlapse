@@ -1,16 +1,5 @@
 @extends('layout')
 
-@section('header')
-    <div class="flex lg:justify-center lg:col-start-2">
-        <x-button
-            href="{{ route('camlapse.index') }}"
-            icon="book"
-            title="Home"
-        />
-    </div>
-@endsection
-
-
 @section('content')
 
 <x-form
@@ -19,6 +8,7 @@
     id="new-timelapse"
     :fields="$camlapse->form"
     method="POST"
+    :data="['devices' => $devices]"
     class="bg-gray-200"
 />
 

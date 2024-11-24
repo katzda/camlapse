@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('camlapses', function (Blueprint $table) {
             $table->id();
+            $table->tinyInteger('camera_id');
             $table->string('name', 255)->unique();
             $table->string('purpose')->default('');
+            $table->smallInteger('video_fps')->default(2);
             $table->time('between_time_start')->default('00:00');
             $table->time('between_time_end')->default('23:59');
             $table->dateTime('stop_datetime')->nullable();

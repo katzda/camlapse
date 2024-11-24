@@ -1,12 +1,4 @@
 #!/bin/bash
 
-# make current script invokable from any directory
-INSTALL_FILE_PREV_DIR=$(pwd)
-INSTALL_FILE_DIR=$(dirname ${BASH_SOURCE[0]});
-cd $INSTALL_FILE_DIR;
-INSTALL_FILE_DIR=$(pwd)
-
-docker compose -f docker-compose.yml down ${options[@]};
-docker compose -f docker-compose.yml up --force-recreate -d --no-build;
-
-cd $INSTALL_FILE_PREV_DIR;
+./run down
+./run up --force-recreate -d --no-build;

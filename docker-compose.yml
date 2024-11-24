@@ -9,10 +9,10 @@ services:
             timeout: 5s
             retries: 5
         build:
-            context: "."
+            context: .
             dockerfile: docker/Dockerfile
             args:
-                - UID
+                - UID=$USERID
                 - GID
         volumes:
             - .:/srv

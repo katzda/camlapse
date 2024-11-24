@@ -1,16 +1,5 @@
 @extends('layout')
 
-@section('header')
-    <div class="flex lg:justify-center lg:col-start-2">
-        <x-button
-            href="{{ route('camlapse.index') }}"
-            icon="book"
-            title="Home"
-        />
-    </div>
-@endsection
-
-
 @section('content')
 
 <x-form
@@ -18,24 +7,23 @@
     title="Edit your camlapse!"
     id="edit-timelapse"
     method="PUT"
+    :data="['devices' => $devices]"
     :fields="$camlapse->form"
     submit="Save"
-    class="bg-gray-200"
-/>
+    class="bg-gray-200" />
 
 <x-form
     action="{{ route('camlapse.destroy', $camlapse->id) }}"
     id="delete-timelapse"
     method="DELETE"
-    submit="Delete"
-/>
+    submit="Delete" />
 
 <script>
-    document.querySelector('#edit-timelapse-fph').onchange = function(event){
+    document.querySelector('#edit-timelapse-fph').onchange = function(event) {
         var el = event.target;
         var parent = el.parentElement;
         var span = parent.querySelector("#fph_in_seconds");
-        if(!span){
+        if (!span) {
             span = document.createElement("div");
             span.setAttribute('id', 'fph_in_seconds');
             parent.appendChild(span);

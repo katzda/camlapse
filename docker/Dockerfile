@@ -3,8 +3,9 @@ FROM php:8.3-fpm-alpine
 ARG UID
 ARG GID
 
-RUN apk update && \
-    apk add --no-cache nginx sqlite php-sqlite3 supervisor
+RUN apk update; \
+    apk add --no-cache nginx sqlite php-sqlite3 supervisor v4l-utils ffmpeg npm;
+#  motion
 
 RUN apk add --no-cache shadow
 RUN usermod -u $UID www-data
