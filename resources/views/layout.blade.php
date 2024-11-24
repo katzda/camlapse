@@ -22,7 +22,7 @@
 
                 <header class="py-10">
 
-                    <div class="text-center rounded-lg bg-white hover:">
+                    <div class="text-center rounded-lg bg-white">
                         <x-button
                             class="shadow-lg"
                             href="{{ route('home') }}"

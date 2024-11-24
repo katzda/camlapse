@@ -1,4 +1,15 @@
-@props(['action', 'id', 'title'=>'', 'fields' => [], 'method', 'submit' => 'Submit', 'class' => '', 'data' => []])
+@props([
+    'action',
+    'id',
+    'title'=>'',
+    'fields' => [],
+    'method',
+    'submit' => 'Submit',
+    'class' => '',
+    'data' => [],
+    'cancel' => 'Cancel',
+    'cancel_path'
+])
 
 @php
 $is_method_standard = $method === 'GET' || $method === 'POST';
@@ -86,7 +97,11 @@ $is_method_standard = $method === 'GET' || $method === 'POST';
     </div>
     @endif
 
-    <div class="px-5">
-        <button type="submit" class="bg-blue-300 w-full h-[50px]">{{$submit}}</button>
+    <div class="flex justify-center">
+        @if(isset($cancel_path))
+        <a href="{{ $cancel_path }}" class="bg-blue-300 w-1/2 leading-[3] m-2">{{ $cancel }}</a>
+        @endif
+
+        <button type="submit" class="bg-blue-300 w-1/2 h-[50px] m-2">{{$submit}}</button>
     </div>
 </form>

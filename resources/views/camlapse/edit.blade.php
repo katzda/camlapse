@@ -10,6 +10,7 @@
     :data="['devices' => $devices]"
     :fields="$camlapse->form"
     submit="Save"
+    cancel_path="{{ route('camlapse.index') }}"
     class="bg-gray-200" />
 
 <x-form

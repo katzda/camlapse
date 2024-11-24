@@ -9,6 +9,7 @@
     :fields="$camlapse->form"
     method="POST"
     :data="['devices' => $devices]"
+    cancel_path="{{ route('camlapse.index') }}"
     class="bg-gray-200"
 />
 
