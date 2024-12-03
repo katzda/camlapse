@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="min-h-full font-sans antialiased dark:bg-black dark:text-white/50
+        bg-black text-black/50 dark:bg-black dark:text-white/50 h-full">
 
 <head>
     <meta charset="utf-8">
@@ -13,44 +15,26 @@
 
 </head>
 
-<body class="font-sans antialiased dark:bg-black dark:text-white/50">
+<body>
+    <img class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" />
+    <div class="relative flex flex-col items-center justify-start selection:bg-[#FF2D20] selection:text-white">
+        <div class="w-full max-w-2xl px-6 lg:max-w-7xl">
 
-    <div class="bg-black text-black/50 dark:bg-black dark:text-white/50">
-        <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" />
-        <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+            <header>
+                <div class="bg-gray-200 flex">
+                    <x-navbut icon='zondicon-home' route="home">Home</x-navbut>
+                    <x-navbut icon='zondicon-list' route="camlapse.index">List</x-navbut>
+                    <x-navbut icon='zondicon-add-outline' route="camlapse.create">Create</x-navbut>
+                </div>
+            </header>
 
-                <header class="py-10">
+            <main class="mt-6">
+                @yield('content')
+            </main>
 
-                    <div class="text-center rounded-lg bg-white">
-                        <x-button
-                            class="shadow-lg"
-                            href="{{ route('home') }}"
-                            icon="home"
-                            title="Home" />
-
-                        <x-button
-                            class="shadow-lg"
-                            href="{{ route('camlapse.index') }}"
-                            icon="list"
-                            title="List" />
-
-                        <x-button
-                            class="shadow-lg"
-                            href="{{ route('camlapse.create') }}"
-                            icon="new"
-                            title="Create" />
-                    </div>
-                </header>
-
-                <main class="mt-6">
-                    @yield('content')
-                </main>
-
-                <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                    CamLapse
-                </footer>
-            </div>
+            <footer class="py-16 text-center text-sm text-black dark:text-white/70">
+                CamLapse
+            </footer>
         </div>
     </div>
 </body>

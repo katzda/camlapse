@@ -4,6 +4,8 @@
     "description": "Capturing videos over long periods of time",
     "require": {
         "php": "^8.2",
+        "blade-ui-kit/blade-icons": "^1.7",
+        "blade-ui-kit/blade-zondicons": "^1.5",
         "dragonmantank/cron-expression": "^3.3",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9"

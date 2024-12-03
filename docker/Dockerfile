@@ -20,6 +20,9 @@ RUN set -eux; \
     gosu nobody true; \
     apk del .gosu-deps
 
+RUN curl -s https://getcomposer.org/installer | php; \
+    mv composer.phar /bin/composer
+
 RUN mkdir -p /srv /etc/supervisor.d
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf

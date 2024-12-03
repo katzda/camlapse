@@ -30,7 +30,6 @@ class CameraDevice extends Model
 
         $devices = [];
         $currentDevice = null;
-        $order = 0;
         // Parse the output of the command
         foreach ($output as $line) {
             $line = trim($line);

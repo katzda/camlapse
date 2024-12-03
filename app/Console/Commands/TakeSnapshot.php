@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\CameraDevice;
 use Carbon\Carbon;
 use App\Models\CamLapse;
 use Cron\CronExpression;
@@ -55,8 +56,15 @@ class TakeSnapshot extends Command
      */
     public function handle()
     {
+
         $camlapses = CamLapse::all();
         $now = Carbon::now();
+
+        $os_device_handle = CameraDevice::find($camlapses[0]->camera_id)->device;
+        $output = shell_exec("ffmpeg " . public_path('test.jpg') . " -d " . $os_device_handle);
+        // exec('echo $?', $output);
+
+        dd($output);
 
         foreach ($camlapses as $index => $camlapse) {
             if ($this->isDue($camlapse, $now)) {
@@ -70,55 +78,6 @@ class TakeSnapshot extends Command
         }
     }
 
-    function getFunctionalVideoDevice($filter, string &$error)
-    {
-        // Run `v4l2-ctl --list-devices` and capture the output
-        $output = shell_exec('v4l2-ctl --list-devices');
-        if (!$output) {
-            $error = "Error: Unable to list devices.\n";
-            return null;
-        }
-
-        // Parse the output to find devices that match the filter
-        $devices = [];
-        $lines = explode("\n", $output);
-        $currentDevice = null;
-
-        foreach ($lines as $line) {
-            if (strpos($line, $filter) !== false) {
-                // If the line contains the filter string, it's a new device entry
-                $currentDevice = trim($line);
-                $devices[$currentDevice] = [];
-            } elseif ($currentDevice && preg_match('/\/dev\/video[0-9]+/', $line, $matches)) {
-                // Add video device paths to the current device
-                $devices[$currentDevice][] = trim($matches[0]);
-            }
-        }
-
-        // Check each video device under the filtered name for functionality
-        foreach ($devices as $deviceName => $videoPaths) {
-            if (stripos($deviceName, $filter) === false) {
-                continue;
-            }
-
-            foreach ($videoPaths as $videoPath) {
-                // Test if the device can capture a frame
-                $testImagePath = '/tmp/test_image.jpg';
-                $ffmpegCmd = "ffmpeg -f v4l2 -i $videoPath -frames:v 1 -vframes 1 $testImagePath -y";
-                exec($ffmpegCmd, $ffmpegOutput, $resultCode);
-
-                // If the command succeeds and image is saved, return the device path
-                if ($resultCode === 0 && file_exists($testImagePath) && filesize($testImagePath) > 0) {
-                    unlink($testImagePath); // Clean up test image
-                    return $videoPath; // Functional device found
-                }
-            }
-        }
-
-        $error = "No functional devices found for filter: $filter\n";
-        return null; // No functional device found
-    }
-
     private function saveCameraSnapshot(CamLapse $camlapse, Carbon $now, string &$error): bool
     {
         // Run the first command to get the device
@@ -128,12 +87,7 @@ class TakeSnapshot extends Command
             return false;
         }
 
-        $device = $this->getFunctionalVideoDevice("Arducam", $error);
-
-        if (is_null($device)) {
-            $error = "No functional camera device connected!";
-            return false;
-        }
+        $os_device_handle = CameraDevice::find($camlapse->camera_id)->device;
 
         // Define the temporary file path
         $dir = 'timelapse/' . $camlapse->id . "/photos";
@@ -145,8 +99,11 @@ class TakeSnapshot extends Command
         $photo = '/' . str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
 
         //TODO: ffmpeg -f v4l2 -i /dev/video2 -frames:v 1 /srv/snapshot.jpg
-        shell_exec("ffmpeg " . public_path($dir . $photo) . " -d " . $device);
+        shell_exec("ffmpeg " . public_path($dir . $photo) . " -d " . $os_device_handle);
 
+        exec('echo $?', $output);
+
+        dd($output);
         //TODO adjust cam settings: v4l2-ctl -d /dev/video2 --list-ctrls
 
         return true;
