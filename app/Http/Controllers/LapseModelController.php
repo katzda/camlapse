@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CamLapse;
-use App\Http\Requests\CamLapseEditRequest;
-use App\Http\Requests\CamLapseCreateRequest;
-use App\Models\CameraDevice;
+use App\Models\LapseModel;
+use App\Models\HardwareModel;
+use App\Http\Requests\LapseModel\LapseModelEditRequest;
+use App\Http\Requests\LapseModel\LapseModelCreateRequest;
 
-class CamLapseController extends Controller
+class LapseModelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class CamLapseController extends Controller
     public function index()
     {
         return View('camlapse.index', [
-            'all' => CamLapse::all()
+            'all' => LapseModel::all()
         ]);
     }
 
@@ -25,27 +25,27 @@ class CamLapseController extends Controller
     public function create()
     {
         return View('camlapse.create', [
-            'camlapse' => new CamLapse(),
-            'devices' => CameraDevice::all(),
+            'camlapse' => new LapseModel(),
+            'devices' => HardwareModel::all(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CamLapseCreateRequest $request)
+    public function store(LapseModelCreateRequest $request)
     {
-        CamLapse::create($request->validated());
+        LapseModel::create($request->validated());
 
         return View('camlapse.index', [
-            'all' => CamLapse::all()
+            'all' => LapseModel::all()
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CamLapse $camlapse)
+    public function show(LapseModel $camlapse)
     {
         return View('camlapse.show', [
             'camlapse' => $camlapse
@@ -55,18 +55,18 @@ class CamLapseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CamLapse $camlapse)
+    public function edit(LapseModel $camlapse)
     {
         return View('camlapse.edit', [
             'camlapse' => $camlapse,
-            'devices' => CameraDevice::all(),
+            'devices' => HardwareModel::all(),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CamLapseEditRequest $request, CamLapse $camlapse)
+    public function update(LapseModelEditRequest $request, LapseModel $camlapse)
     {
         $camlapse->update($request->validated());
 
@@ -78,20 +78,20 @@ class CamLapseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CamLapse $camlapse)
+    public function destroy(LapseModel $camlapse)
     {
         $camlapse->delete();
         return redirect(route('camlapse.index'));
     }
 
-    public function activate(CamLapse $camlapse)
+    public function activate(LapseModel $camlapse)
     {
-        CamLapse::deactivateAll();
+        LapseModel::deactivateAll();
         $camlapse->activate();
         return redirect(route('camlapse.index'));
     }
 
-    public function deactivate(CamLapse $camlapse)
+    public function deactivate(LapseModel $camlapse)
     {
         $camlapse->deactivate();
         return redirect(route('camlapse.index'));

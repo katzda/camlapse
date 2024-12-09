@@ -1,17 +1,19 @@
 <?php
 
-use App\Http\Controllers\DevicesController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CamLapseController;
+use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\LapseModelController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::withoutMiddleware([VerifyCsrfToken::class])->group(function () {
     Route::resources([
-        'camlapse' => CamLapseController::class
+        'camlapse' => LapseModelController::class
     ]);
 
-    Route::get('/', [DevicesController::class, "index"])->name('home');
-    Route::post('devices/refresh', [DevicesController::class, 'update'])->name('devices.refresh');
-    Route::post('camlapse/{camlapse}/activate', [CamLapseController::class, 'activate'])->name('camlapse.activate');
-    Route::post('camlapse/{camlapse}/deactivate', [CamLapseController::class, 'deactivate'])->name('camlapse.deactivate');
+    Route::get('/', [HardwareController::class, "index"])->name('home');
+    Route::post('devices/refresh', [HardwareController::class, 'autoUpdate'])->name('devices.refresh');
+    Route::post('camlapse/{camlapse}/activate', [LapseModelController::class, 'activate'])->name('camlapse.activate');
+    Route::post('camlapse/{camlapse}/deactivate', [LapseModelController::class, 'deactivate'])->name('camlapse.deactivate');
+    Route::get('hardware_settings/{hardware}', [SettingsController::class, 'show'])->name('settings.show');
 });

@@ -18,10 +18,10 @@
 <body>
     <img class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" />
     <div class="relative flex flex-col items-center justify-start selection:bg-[#FF2D20] selection:text-white">
-        <div class="w-full max-w-2xl px-6 lg:max-w-7xl">
+        <div class="w-full max-w-2xl px-6 lg:max-w-5xl">
 
-            <header>
-                <div class="bg-gray-200 flex">
+            <header class="h-[50px] bg-gray-200">
+                <div class="flex h-full">
                     <x-navbut icon='zondicon-home' route="home">Home</x-navbut>
                     <x-navbut icon='zondicon-list' route="camlapse.index">List</x-navbut>
                     <x-navbut icon='zondicon-add-outline' route="camlapse.create">Create</x-navbut>

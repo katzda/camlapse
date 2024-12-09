@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CameraDevice;
+use App\Models\HardwareModel;
 use Carbon\Carbon;
-use App\Models\CamLapse;
+use App\Models\LapseModel;
 use Cron\CronExpression;
 use Illuminate\Console\Command;
 
@@ -24,7 +24,7 @@ class TakeSnapshot extends Command
      */
     protected $description = 'Check timelapse crons and take due snapshots';
 
-    function isDue(CamLapse $camlapse, Carbon $now)
+    function isDue(LapseModel $camlapse, Carbon $now)
     {
         $cron = new CronExpression($camlapse->cron); //https://github.com/dragonmantank/cron-expression
         // 5 custom conditions
@@ -57,10 +57,16 @@ class TakeSnapshot extends Command
     public function handle()
     {
 
-        $camlapses = CamLapse::all();
+        $camlapses = LapseModel::all();
         $now = Carbon::now();
 
-        $os_device_handle = CameraDevice::find($camlapses[0]->camera_id)->device;
+        $cam = HardwareModel::find($camlapses[0]->camera_id);
+
+        if(is_null($cam)){
+            $this->error("No device found");
+            exit;
+        }
+        $os_device_handle = HardwareModel::find($camlapses[0]->camera_id)->device;
         $output = shell_exec("ffmpeg " . public_path('test.jpg') . " -d " . $os_device_handle);
         // exec('echo $?', $output);
 
@@ -78,7 +84,7 @@ class TakeSnapshot extends Command
         }
     }
 
-    private function saveCameraSnapshot(CamLapse $camlapse, Carbon $now, string &$error): bool
+    private function saveCameraSnapshot(LapseModel $camlapse, Carbon $now, string &$error): bool
     {
         // Run the first command to get the device
         $error = shell_exec("v4l2-ctl --list-devices 1>/dev/null");
@@ -87,7 +93,7 @@ class TakeSnapshot extends Command
             return false;
         }
 
-        $os_device_handle = CameraDevice::find($camlapse->camera_id)->device;
+        $os_device_handle = HardwareModel::find($camlapse->camera_id)->device;
 
         // Define the temporary file path
         $dir = 'timelapse/' . $camlapse->id . "/photos";
@@ -109,7 +115,7 @@ class TakeSnapshot extends Command
         return true;
     }
 
-    private function updateVideo(CamLapse $camlapse)
+    private function updateVideo(LapseModel $camlapse)
     {
         $baseDir = 'timelapse/' . $camlapse->id;
         $abs_path = public_path($baseDir . "/photos");

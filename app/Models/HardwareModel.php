@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CameraDevice extends Model
+class HardwareModel extends Model
 {
     use HasFactory;
 
@@ -19,8 +19,7 @@ class CameraDevice extends Model
     public static function refreshDevices()
     {
         $devices = self::getFunctionalVideoDevice();
-        CameraDevice::truncate();
-        CameraDevice::insert($devices);
+        HardwareModel::insertOrIgnore($devices);
     }
 
     public static function getFunctionalVideoDevice(): array
