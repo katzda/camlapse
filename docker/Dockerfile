@@ -3,9 +3,19 @@ FROM php:8.3-fpm-alpine
 ARG UID
 ARG GID
 
-RUN apk update; \
-    apk add --no-cache nginx sqlite php-sqlite3 supervisor v4l-utils ffmpeg npm;
-#  motion
+RUN apk update && apk add --no-cache \
+    nginx \
+    sqlite \
+    supervisor \
+    v4l-utils \
+    ffmpeg \
+    npm \
+    build-base \
+    linux-headers \
+    php-cli \
+    autoconf && \
+    docker-php-ext-install pcntl && \
+    docker-php-ext-enable pcntl
 
 RUN apk add --no-cache shadow
 RUN usermod -u $UID www-data
