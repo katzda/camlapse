@@ -43,7 +43,17 @@
             method: 'GET',
         })
         .then((response) => {
-            console.log('Success:', response);
+            return response.arrayBuffer();
+        })
+        .then((buffer) => {
+            const base64String = btoa(
+                new Uint8Array(buffer)
+                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
+            );
+            photoPreview.src = `data:image/jpeg;base64,${base64String}`;
+            photoPreview.classList.remove('hidden');
+            photoPlaceholder.classList.add('hidden')
+
         })
         .catch((error) => {
             console.error('Error:', error);
