@@ -55,7 +55,7 @@ class LapseModel extends Model
 
     public static function deactivateAll()
     {
-        HardwareModel::where('is_active', true)
+        LapseModel::where('is_active', true)
             ->update([
                 'is_active' => false
             ]);
