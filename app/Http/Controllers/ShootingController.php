@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Redis;
 use App\Services\CameraSettingsService;
 
 class ShootingController extends Controller

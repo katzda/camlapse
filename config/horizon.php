@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ return [
     */
 
     'waits' => [
-        'redis:default' => 60,
+        'redis:default' => 5,
     ],
 
     /*
@@ -200,11 +200,13 @@ return [
     'environments' => [
         'production' => [
             'supervisor-1' => [
+                'maxProcesses' => 10,
             ],
         ],
 
         'local' => [
             'supervisor-1' => [
+                'maxProcesses' => 10,
             ],
         ],
     ],
