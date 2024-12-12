@@ -23,7 +23,7 @@ class ShowHardwareSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hardware_id' => 'required|exists:camlapses,id'
+            'hardware_id' => 'required|exists:camera,id'
         ];
     }
 

@@ -14,12 +14,10 @@
             <img id="photoPreview" class="hidden w-full h-full object-cover rounded-lg" />
         </div>
 
-        <form id="form_snapshot">
-            <input
-                type="hidden"
-                id="hardware_id"
-                value="{{ $device['name'] }}"
-            />
+        <form id="formSnapshot"
+            action="{{ route('shoot.snapshot', ['hardware' => $device['id']]) }}"
+            onclick="return false;"
+        >
             <button
                 id="captureButton"
                 class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -31,6 +29,7 @@
 </div>
 
 <script>
+    const formSnapshot = document.getElementById('formSnapshot');
     const captureButton = document.getElementById('captureButton');
     const photoPreview = document.getElementById('photoPreview');
     const photoPlaceholder = document.getElementById('photoPlaceholder');
@@ -40,20 +39,14 @@
     });
 
     function snapshot(file) {
-        const formData = new FormData();
-
-        fetch('/upload', {
-        method: 'POST',
-        body: formData,
+        fetch(formSnapshot.action, {
+            method: 'GET',
         })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Upload successful:', data);
-            alert('Image uploaded successfully!');
+        .then((response) => {
+            console.log('Success:', response);
         })
         .catch((error) => {
-            console.error('Error uploading image:', error);
-            alert('Failed to upload the image.');
+            console.error('Error:', error);
         });
     }
 </script>

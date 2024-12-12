@@ -31,7 +31,7 @@ class HardwareController extends Controller
      */
     public function show(HardwareModel $cameraDevice)
     {
-        //
+        dd("hey");
     }
 
     /**

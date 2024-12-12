@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\HardwareModel;
-use App\Http\Requests\HardwareModel\ShowHardwareSettingsRequest;
+use App\Services\CameraSettingsService;
 
 class ShootingController extends Controller
 {
-    public function Snapshot(ShowHardwareSettingsRequest $request)
+
+    public function snapshot(
+        int $hardware,
+        CameraSettingsService $service
+    )
     {
-        $validated = $request->validated();
-        $hardware = HardwareModel::find($validated['hardware_id']);
+        $snaphotData = $service->GetSnaphot($hardware);
 
-
+        return response($snaphotData, 200)
+            ->header('Content-Type', 'image/jpeg');
     }
 }

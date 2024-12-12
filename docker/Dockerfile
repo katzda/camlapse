@@ -10,12 +10,19 @@ RUN apk update && apk add --no-cache \
     v4l-utils \
     ffmpeg \
     npm \
+    php-redis \
+    php-cli \
     build-base \
     linux-headers \
-    php-cli \
     autoconf && \
     docker-php-ext-install pcntl && \
     docker-php-ext-enable pcntl
+
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && apk add --no-cache redis \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del .build-deps
 
 RUN apk add --no-cache shadow
 RUN usermod -u $UID www-data
