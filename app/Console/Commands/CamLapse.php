@@ -8,7 +8,7 @@ use App\Models\LapseModel;
 use Cron\CronExpression;
 use Illuminate\Console\Command;
 
-class TakeSnapshot extends Command
+class CamLapse extends Command
 {
     /**
      * The name and signature of the console command.
@@ -56,7 +56,6 @@ class TakeSnapshot extends Command
      */
     public function handle()
     {
-
         $camlapses = LapseModel::all();
         $now = Carbon::now();
 
@@ -68,9 +67,6 @@ class TakeSnapshot extends Command
         }
         $os_device_handle = HardwareModel::find($camlapses[0]->camera_id)->device;
         $output = shell_exec("ffmpeg " . public_path('test.jpg') . " -d " . $os_device_handle);
-        // exec('echo $?', $output);
-
-        dd($output);
 
         foreach ($camlapses as $index => $camlapse) {
             if ($this->isDue($camlapse, $now)) {
