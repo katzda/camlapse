@@ -1,6 +1,6 @@
 <?php
 
-use App\Console\Commands\TakeSnapshot;
+use App\Console\Commands\CamLapse;
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::command(TakeSnapshot::class)->everyMinute();
+Schedule::command(CamLapse::class)->everyMinute();

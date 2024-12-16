@@ -14,8 +14,28 @@ class LapseModelController extends Controller
      */
     public function index()
     {
+        $lapseModels = LapseModel::all();
+        $lapses = [];
+        foreach($lapseModels as $index => $lapseModel)
+        {
+            $videoPath = public_path('timelapse/'.$lapseModel['id'].'/video.mp4');
+
+            if (file_exists($videoPath)) {
+                $lastModified = filemtime($videoPath);
+                $videoPath .= '?v=' . $lastModified;
+            }
+
+            $lapses[] = [
+                'id' => $lapseModel['id'],
+                'lastModified' => $lastModified,
+                'name' => $lapseModel['name'],
+                'cron' => $lapseModel->cron,
+                'is_active' => $lapseModel['is_active'],
+            ];
+        };
+
         return View('camlapse.index', [
-            'all' => LapseModel::all()
+            'camlapses' => $lapses
         ]);
     }
 

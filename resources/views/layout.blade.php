@@ -22,8 +22,8 @@
 
             <header class="h-[50px] bg-gray-200">
                 <div class="flex h-full">
-                    <x-navbut icon='zondicon-home' route="home">Home</x-navbut>
-                    <x-navbut icon='zondicon-list' route="camlapse.index">List</x-navbut>
+                    <x-navbut icon='zondicon-home' route="home">Devices</x-navbut>
+                    <x-navbut icon='zondicon-list' route="camlapse.index">Time Lapses</x-navbut>
                     <x-navbut icon='zondicon-add-outline' route="camlapse.create">Create</x-navbut>
                 </div>
             </header>

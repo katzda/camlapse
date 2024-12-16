@@ -19,6 +19,7 @@ class HardwareModel extends Model
     public static function refreshDevices()
     {
         $devices = self::getFunctionalVideoDevice();
+        HardwareModel::truncate();
         HardwareModel::insertOrIgnore($devices);
     }
 

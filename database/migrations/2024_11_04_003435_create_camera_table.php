@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('camera', function (Blueprint $table) {
             $table->tinyIncrements('id');
-            $table->string('name', 255);
+            $table->string('name', 255)->unique();
             $table->string('device', 31);
             $table->timestamps();
         });

@@ -3,14 +3,14 @@
 @section('content')
 
 <div class="">
-    @foreach ($all as $camlapse)
+    @foreach ($camlapses as $camlapse)
 
     <x-tile class="text-center bg-gray-200 rounded">
         <a href="{{ route('camlapse.show', ['camlapse' => $camlapse['id']]) }}">
             <div class="hover:bg-sky-200 px-10 py-3">
                 <h2 class="text-4xl">{{$camlapse['name']}}
                     <h2>
-                        <span>{{ $camlapse->cron }} photoes / hour</span>
+                        <span>{{ $camlapse['cron'] }} photoes / hour</span>
                         <x-arrow-r />
             </div>
         </a>
@@ -20,7 +20,7 @@
             Your browser does not support the video tag.
         </video>
 
-        <a href="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4') }}" download="{{ strtolower(str_replace(' ', '_',$camlapse['name'])) }}">download</a>
+        <a href="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4') . '?v=' . $camlapse['lastModified'] }}" download="{{ strtolower(str_replace(' ', '_',$camlapse['name'])) }}">download</a>
 
         @if(!$camlapse['is_active'])
         <x-form
