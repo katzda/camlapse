@@ -18,11 +18,15 @@ storage/framework/views/*
 !storage/framework/views/.gitignore
 storage/logs/*
 !storage/logs/.gitignore
+art
 .env
 enter
+enters
+build
 exec
 npm
 php
 run
 spinup
 supervisord.pid
+composer.phar

@@ -2,5 +2,6 @@
 
 export USERID=$(id -u)
 export GID=$(id -g)
+export build_stage=${build_stage:-dev}
 
 docker compose -f docker-compose.yml exec "${@:1}"

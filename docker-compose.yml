@@ -16,8 +16,6 @@ services:
             args:
                 - UID=$USERID
                 - GID
-        volumes:
-            - .:/srv
         ports:
             - 80:80
         expose:
