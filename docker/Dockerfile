@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-fpm-alpine AS base
 
 ARG UID
 ARG GID
@@ -9,7 +9,6 @@ RUN apk update && apk add --no-cache \
     supervisor \
     v4l-utils \
     ffmpeg \
-    npm \
     php-redis \
     php-cli \
     build-base \
@@ -37,9 +36,6 @@ RUN set -eux; \
     gosu nobody true; \
     apk del .gosu-deps
 
-RUN curl -s https://getcomposer.org/installer | php; \
-    mv composer.phar /bin/composer
-
 RUN mkdir -p /srv /etc/supervisor.d
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
@@ -51,3 +47,20 @@ WORKDIR /srv
 EXPOSE 80
 
 ENTRYPOINT ["entrypoint.sh"]
+
+
+FROM base AS dev
+RUN apk update && apk add --no-cache npm
+RUN curl -s https://getcomposer.org/installer | php; \
+    mv composer.phar /bin/composer
+
+
+FROM dev AS build
+COPY . /srv
+RUN composer install
+RUN npm install
+RUN npm run dev
+
+
+FROM build as prod
+COPY --from=build /srv /srv

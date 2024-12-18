@@ -1,4 +1,6 @@
 #!/bin/bash
 
+export build_stage=${1:-""}
+
 ./run down
 ./run up --force-recreate -d --no-build;

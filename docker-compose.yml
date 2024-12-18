@@ -2,6 +2,7 @@ services:
     app:
         container_name: camlapse
         hostname: camlapse
+        image: camlapse:latest
         privileged: true
         healthcheck:
             test: curl --fail --header 'Host:camlapse.world' http://127.0.0.1 || exit 1
@@ -9,6 +10,7 @@ services:
             timeout: 5s
             retries: 5
         build:
+            target: $build_stage
             context: .
             dockerfile: docker/Dockerfile
             args:

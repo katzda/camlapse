@@ -1,0 +1,31 @@
+#!/bin/bash
+
+hash=$(docker image ls -f reference="camlapse:latest" --format "{{.ID}}")
+
+base_dir="/tmp"
+image_tar="camlapse_$hash.tar"
+remote_server="katzda@qa.server"
+
+# Check if image file already exists locally
+if [ -f "$base_dir/$image_tar" ]; then
+    echo "File exists: $base_dir/$image_tar"
+else
+    echo "File does not exist: $base_dir/$image_tar"
+    docker save -o "$base_dir/$image_tar" docker.io/library/camlapse:latest
+fi
+
+# Check if image had been previously uploaded
+if ssh "$remote_server" "[ -f $base_dir/$image_tar ]"; then
+    echo "File exists on remote server: $base_dir/$image_tar"
+else
+    echo "File does not exist on remote server: $base_dir/$image_tar"
+    scp "$base_dir/$image_tar" "$remote_server:$base_dir/$image_tar"
+fi
+
+#scp ./docker-compose.yml "$remote_server:$base_dir/docker-compose.yml"
+#scp ./run "$remote_server:$base_dir/run"
+#scp ./spinup "$remote_server:$base_dir/spinup"
+
+#ssh -t $remote_server "
+#    docker load -i  "$base_dir/$image_tar"
+#"
