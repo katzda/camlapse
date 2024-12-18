@@ -1,3 +1,5 @@
 #!/bin/bash
 
+export build_stage=${1:-""}
+
 ./exec -it -u www-data app ash

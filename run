@@ -4,8 +4,4 @@ export USERID=$(id -u)
 export GID=$(id -g)
 export build_stage=${build_stage:-dev}
 
-if [ "$build_stage" = "dev" ]; then
-    docker compose "${@:1}"
-fi;
-
-docker compose -f docker-compose.yml "${@:1}"
+docker compose -f docker-compose.$build_stage.yml "${@:1}";

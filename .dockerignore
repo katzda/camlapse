@@ -19,7 +19,6 @@ storage/framework/views/*
 storage/logs/*
 !storage/logs/.gitignore
 art
-.env
 enter
 enters
 build
@@ -30,3 +29,5 @@ run
 spinup
 supervisord.pid
 composer.phar
+public/timelapse
+database/database.sqlite

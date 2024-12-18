@@ -1,33 +1,55 @@
 #!/bin/bash
 
-hash=$(docker image ls -f reference="camlapse:latest" --format "{{.ID}}")
 
-base_dir="/tmp"
-image_tar="camlapse_$hash.tar"
-remote_server="katzda@qa.server"
+hash=$(docker image ls -f reference="camlapse:latest" --format "{{.ID}}");
+
+img_base_dir="/tmp/camlapse";
+app_base_dir="/tmp/camlapse/app";
+image_tar="camlapse_$hash.tar";
+remote_server="katzda@qa.server";
+overwrite=$1;
+
+mkdir -p $img_base_dir;
 
 # Check if image file already exists locally
-if [ -f "$base_dir/$image_tar.gz" ]; then
-    echo "File exists: $base_dir/$image_tar.gz"
+if [ -f "$img_base_dir/$image_tar.gz" ]; then
+    echo "File exists: $img_base_dir/$image_tar.gz";
 else
-    echo "File does not exist: $base_dir/$image_tar.gz"
-    docker save -o "$base_dir/$image_tar" docker.io/library/camlapse:latest
-    gzip $base_dir/$image_tar
+    echo "Creating image archive locally: $img_base_dir/$image_tar.gz";
+    rm $img_base_dir/*;
+    docker save -o "$img_base_dir/$image_tar" docker.io/library/camlapse:latest;
+    gzip $img_base_dir/$image_tar;
 fi
+
+ssh -t $remote_server "
+    mkdir -p $img_base_dir;
+    mkdir -p $app_base_dir
+";
 
 # Check if image had been previously uploaded
-if ssh "$remote_server" "[ -f $base_dir/$image_tar.gz ]"; then
-    echo "File exists on remote server: $base_dir/$image_tar.gz"
+if ssh "$remote_server" "[ -f $img_base_dir/$image_tar.gz ]" && [ "$overwrite" = "" ]; then
+    echo "File exists on remote server: $img_base_dir/$image_tar.gz";
 else
-    echo "File does not exist on remote server: $base_dir/$image_tar.gz"
-    scp "$base_dir/$image_tar.gz" "$remote_server:$base_dir/$image_tar"
+    echo "Uploading image to remote server: $img_base_dir/$image_tar.gz";
+    scp "$img_base_dir/$image_tar.gz" "$remote_server:$img_base_dir/$image_tar.gz";
 fi
 
-#scp ./docker-compose.yml "$remote_server:$base_dir/docker-compose.yml"
-#scp ./run "$remote_server:$base_dir/run"
-#scp ./spinup "$remote_server:$base_dir/spinup"
+scp ./docker-compose.prod.yml ./run ./spinup ./enter ./exec "$remote_server:$app_base_dir";
 
-#ssh -t $remote_server "
-#    gunzip camlapse_$hash.tar.gz
-#    docker load -i  "$base_dir/$image_tar"
-#"
+ssh -t $remote_server "
+   cd $img_base_dir;
+
+   if [ -f "$img_base_dir/$image_tar" ]; then
+        echo 'file exists';
+   else
+        echo 'unzipping'
+        gunzip $image_tar.gz;
+   fi;
+
+   echo 'loading'
+   docker load -i $image_tar;
+
+   echo 'spinup'
+   cd $app_base_dir;
+   ./spinup prod
+"
