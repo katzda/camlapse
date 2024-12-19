@@ -58,9 +58,7 @@ class LapseModelController extends Controller
     {
         LapseModel::create($request->validated());
 
-        return View('camlapse.index', [
-            'all' => LapseModel::all()
-        ]);
+        return redirect(route('camlapse.index'));
     }
 
     /**
@@ -101,6 +99,10 @@ class LapseModelController extends Controller
      */
     public function destroy(LapseModel $camlapse)
     {
+        $dir = public_path('timelapse/' . $camlapse->id);
+
+        shell_exec("rm -rf $dir");
+
         $camlapse->delete();
         return redirect(route('camlapse.index'));
     }
