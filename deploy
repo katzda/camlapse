@@ -23,13 +23,15 @@ fi
 
 ssh -t $remote_server "
     mkdir -p $img_base_dir;
-    mkdir -p $app_base_dir
+    mkdir -p $app_base_dir/database;
 ";
 
 # Check if image had been previously uploaded
-if ssh "$remote_server" "[ -f $img_base_dir/$image_tar.gz ]" && [ "$overwrite" = "" ]; then
+if ssh "$remote_server" "[ -f $img_base_dir/$image_tar.gz ] || [ -f $img_base_dir/$image_tar ]" && [ "$overwrite" != "overwrite" ]; then
     echo "File exists on remote server: $img_base_dir/$image_tar.gz";
 else
+    echo "Deleting old remote files";
+    ssh -t $remote_server "rm $img_base_dir/*.gz $img_base_dir/*.tar";
     echo "Uploading image to remote server: $img_base_dir/$image_tar.gz";
     scp "$img_base_dir/$image_tar.gz" "$remote_server:$img_base_dir/$image_tar.gz";
 fi
@@ -53,12 +55,12 @@ ssh -t $remote_server "
 
    cd $app_base_dir;
    sed -i \"s/APP_KEY=.*/APP_KEY=/;s/APP_ENV=.*/APP_ENV=production/\" .env;
-   touch database.sqlite;
+   touch database/database.sqlite;
 
    echo 'spinup'
    ./spinup prod
 
    echo 'finalizing'
-   docker compose -f docker-compose.$build_stage.yml exec artisan key:generate --ansi;
-   docker compose -f docker-compose.$build_stage.yml exec artisan migrate  --force --graceful --ansi;
+   docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
+   docker compose -f docker-compose.prod.yml exec -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
 "
