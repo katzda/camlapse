@@ -28,39 +28,53 @@ ssh -t $remote_server "
 
 # Check if image had been previously uploaded
 if ssh "$remote_server" "[ -f $img_base_dir/$image_tar.gz ] || [ -f $img_base_dir/$image_tar ]" && [ "$overwrite" != "overwrite" ]; then
-    echo "File exists on remote server: $img_base_dir/$image_tar.gz";
+    echo "File exists on remote: $img_base_dir/$image_tar.gz";
 else
     echo "Deleting old remote files";
     ssh -t $remote_server "rm $img_base_dir/*.gz $img_base_dir/*.tar";
-    echo "Uploading image to remote server: $img_base_dir/$image_tar.gz";
+    echo "Uploading image: $img_base_dir/$image_tar.gz";
     scp "$img_base_dir/$image_tar.gz" "$remote_server:$img_base_dir/$image_tar.gz";
 fi
 
-scp ./docker-compose.prod.yml .env ./run ./spinup ./enter ./exec "$remote_server:$app_base_dir";
+# Check if .env had been previously uploaded
+if ssh "$remote_server" "[ -f $app_base_dir/.env ]"; then
+    echo "File exists on remote: $app_base_dir/.env";
+else
+    echo "Uploading .env file";
+    scp ./.env "$remote_server:$app_base_dir";
+    ssh -t $remote_server "sed -i \"s/APP_KEY=.*/APP_KEY=/;s/APP_ENV=.*/APP_ENV=production/\"" $app_base_dir/.env;
+fi
+
+scp ./docker-compose.prod.yml ./run ./spinup ./enter ./exec "$remote_server:$app_base_dir";
 
 ssh -t $remote_server "
-   cd $img_base_dir;
+    cd $img_base_dir;
 
-   if [ -f "$img_base_dir/$image_tar" ]; then
-        echo 'file exists';
-   else
-        echo 'unzipping'
-        gunzip $image_tar.gz;
-   fi;
+    if [ -f "$img_base_dir/$image_tar" ]; then
+            echo 'file exists';
+    else
+            echo 'unzipping'
+            gunzip $image_tar.gz;
+    fi;
 
-   echo 'loading'
-   docker load -i $image_tar;
+    echo 'loading'
+    docker load -i $image_tar;
 
-   echo 'configuring'
+    echo 'configuring'
 
-   cd $app_base_dir;
-   sed -i \"s/APP_KEY=.*/APP_KEY=/;s/APP_ENV=.*/APP_ENV=production/\" .env;
-   touch database/database.sqlite;
+    cd $app_base_dir;
+    touch database/database.sqlite;
 
-   echo 'spinup'
-   ./spinup prod
+    echo 'spinup'
+    ./spinup prod
 
-   echo 'finalizing'
-   docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
-   docker compose -f docker-compose.prod.yml exec -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
+    echo 'finalizing'
+
+    if grep -q '^APP_KEY=$' $app_base_dir/.env; then
+        docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi;
+    else
+        echo "app key already set";
+    fi;
+
+    docker compose -f docker-compose.prod.yml exec -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
 "
