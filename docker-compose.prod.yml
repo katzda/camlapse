@@ -16,11 +16,15 @@ services:
             args:
                 - UID=$USERID
                 - GID
+        volumes:
+            - ./.env:/srv/.env
+            - ./database/database.sqlite:/srv/database/database.sqlite
         ports:
             - 80:80
         expose:
             - 9000
         networks:
+            - frontend
             - backend
 
     redis:
@@ -41,4 +45,5 @@ volumes:
     redis_data:
 
 networks:
+    frontend:
     backend:

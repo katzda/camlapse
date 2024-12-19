@@ -20,6 +20,7 @@ class LapseModelController extends Controller
         {
             $videoPath = public_path('timelapse/'.$lapseModel['id'].'/video.mp4');
 
+            $lastModified = "";
             if (file_exists($videoPath)) {
                 $lastModified = filemtime($videoPath);
                 $videoPath .= '?v=' . $lastModified;

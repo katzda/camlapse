@@ -34,7 +34,7 @@ else
     scp "$img_base_dir/$image_tar.gz" "$remote_server:$img_base_dir/$image_tar.gz";
 fi
 
-scp ./docker-compose.prod.yml ./run ./spinup ./enter ./exec "$remote_server:$app_base_dir";
+scp ./docker-compose.prod.yml .env ./run ./spinup ./enter ./exec "$remote_server:$app_base_dir";
 
 ssh -t $remote_server "
    cd $img_base_dir;
@@ -49,7 +49,16 @@ ssh -t $remote_server "
    echo 'loading'
    docker load -i $image_tar;
 
-   echo 'spinup'
+   echo 'configuring'
+
    cd $app_base_dir;
+   sed -i \"s/APP_KEY=.*/APP_KEY=/;s/APP_ENV=.*/APP_ENV=production/\" .env;
+   touch database.sqlite;
+
+   echo 'spinup'
    ./spinup prod
+
+   echo 'finalizing'
+   docker compose -f docker-compose.$build_stage.yml exec artisan key:generate --ansi;
+   docker compose -f docker-compose.$build_stage.yml exec artisan migrate  --force --graceful --ansi;
 "

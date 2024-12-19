@@ -60,10 +60,6 @@ COPY . /srv
 RUN composer install
 RUN npm install
 RUN npm run dev
-RUN sed -i "s/APP_KEY=.*/APP_KEY=/;s/APP_ENV=local/APP_ENV=production/" .env
-RUN php artisan key:generate --ansi; \
-    php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"; \
-    php artisan migrate  --force --graceful --ansi;
 
 FROM build as prod
 COPY --from=build /srv /srv

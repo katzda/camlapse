@@ -16,13 +16,14 @@ services:
             args:
                 - UID=$USERID
                 - GID
+        volumes:
+            - .:/srv
         ports:
             - 80:80
         expose:
             - 9000
-        volumes:
-            - .:/srv
         networks:
+            - frontend
             - backend
 
     redis:
@@ -43,4 +44,5 @@ volumes:
     redis_data:
 
 networks:
+    frontend:
     backend:
