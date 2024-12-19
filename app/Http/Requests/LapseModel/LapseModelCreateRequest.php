@@ -14,8 +14,9 @@ class LapseModelCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','max:255','unique:camlapses'],
+            'name' => ['required', 'string', 'max:255', 'unique:camlapses'],
             'purpose' => ['string'],
+            'video_fps' => ['integer', 'required', 'min:1'],
             'camera_id' => ['integer', 'required', 'exists:camera,id'],
             'between_time_start' => ['date_format:H:i'],
             'between_time_end' => ['date_format:H:i'],
