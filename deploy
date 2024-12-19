@@ -1,12 +1,12 @@
 #!/bin/bash
 
-
 hash=$(docker image ls -f reference="camlapse:latest" --format "{{.ID}}");
 
+username=katzda
 img_base_dir="/tmp/camlapse";
-app_base_dir="/tmp/camlapse/app";
+app_base_dir="/home/$username/camlapse";
 image_tar="camlapse_$hash.tar";
-remote_server="katzda@qa.server";
+remote_server="$username@qa.server";
 overwrite=$1;
 
 mkdir -p $img_base_dir;
@@ -71,9 +71,9 @@ ssh -t $remote_server "
     echo 'finalizing'
 
     if grep -q '^APP_KEY=$' $app_base_dir/.env; then
-        docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi;
+        docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
     else
-        echo "app key already set";
+        echo "APP_KEY is already set";
     fi;
 
     docker compose -f docker-compose.prod.yml exec -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
