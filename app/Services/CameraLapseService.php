@@ -67,45 +67,4 @@ class CameraLapseService {
 
         return true;
     }
-
-    public function updateVideo(LapseModel $camlapse)
-    {
-        $baseDir = 'timelapse/' . $camlapse->id;
-        $abs_path = public_path($baseDir . "/photos");
-
-        if (!is_dir(public_path($baseDir))) {
-            mkdir(public_path($baseDir), 0777, true);
-        }
-
-        $photos = scandir($abs_path);
-        $photos = array_filter($photos, function ($filename) {
-            return str_ends_with($filename, '.jpg');
-        });
-
-        $photos = array_map(function ($filename) use ($abs_path) {
-            return $abs_path . '/' . $filename;
-        }, $photos);
-
-        # Generate the input file list for ffmpeg
-        sort($photos);
-
-        $file_list = public_path($baseDir . "/filelist.txt");
-        $video_dir = public_path($baseDir);
-
-        if (file_exists($file_list)) {
-            unlink($file_list);
-        }
-
-        touch($file_list);
-
-        $handle = fopen($file_list, "w");
-        foreach ($photos as $file) {
-            fwrite($handle, "file '$file'\n");
-        }
-        fclose($handle);
-
-
-        shell_exec("ffmpeg -f concat -safe 0 -r $camlapse->video_fps -i $file_list -c:v libx264 -pix_fmt yuv420p -y $video_dir/video.mp4");
-        unlink($file_list);
-    }
 }

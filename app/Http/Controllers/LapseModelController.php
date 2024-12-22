@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobMeta;
 use App\Models\LapseModel;
 use App\Models\HardwareModel;
 use App\Http\Requests\LapseModel\LapseModelEditRequest;
@@ -103,6 +104,7 @@ class LapseModelController extends Controller
 
         shell_exec("rm -rf $dir");
 
+        JobMeta::where('camlapse_id', '=', $camlapse->id)->delete();
         $camlapse->delete();
         return redirect(route('camlapse.index'));
     }

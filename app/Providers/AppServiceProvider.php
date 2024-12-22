@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\CrunchVideoEvent;
+use App\Jobs\CrunchVideo;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            CrunchVideoEvent::class,
+            CrunchVideo::class,
+        );
     }
 }

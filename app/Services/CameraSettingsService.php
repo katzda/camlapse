@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Jobs\TakeSnapshot;
+use App\Jobs\TakeTestSnapshot;
 
 class CameraSettingsService {
 
@@ -14,8 +14,8 @@ class CameraSettingsService {
             shell_exec("mkfifo $fifoPath");
         }
 
-        //  TakeSnapshot::dispatch(1, config('camera.fifo_storage_path'))->onQueue('camera');
-        TakeSnapshot::dispatch($hardware_id, $fifoPath)->onQueue('camera');
+        //  TakeTestSnapshot::dispatch(1, config('camera.fifo_storage_path'))->onQueue('camera');
+        TakeTestSnapshot::dispatch($hardware_id, $fifoPath)->onQueue('camera');
 
         $file = file_get_contents($fifoPath);
 

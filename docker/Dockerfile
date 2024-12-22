@@ -61,5 +61,5 @@ RUN composer install
 RUN npm install
 RUN npm run dev
 
-FROM build as prod
+FROM build AS prod
 COPY --from=build /srv /srv

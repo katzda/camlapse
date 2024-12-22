@@ -2,12 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\HardwareModel;
-use Carbon\Carbon;
 use App\Models\LapseModel;
-use App\Services\CameraLapseService;
-use Cron\CronExpression;
 use Illuminate\Console\Command;
+use App\Events\CrunchVideoEvent;
+use App\Services\CameraLapseService;
 
 class CamLapse extends Command
 {
@@ -27,7 +25,7 @@ class CamLapse extends Command
 
                 if ($cameraLapseService->saveCameraSnapshot($camlapse, $now, $error)) {
                     $this->info($camlapse->name . ": snap!");
-                    $cameraLapseService->updateVideo($camlapse);
+                    CrunchVideoEvent::dispatch($camlapse->id);
                 } else {
                     $this->error($error);
                 }

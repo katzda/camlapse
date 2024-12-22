@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class TakeSnapshot implements ShouldQueue
+class TakeTestSnapshot implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -18,8 +18,9 @@ class TakeSnapshot implements ShouldQueue
      */
     public function __construct(
         public $hardware_id,
-        public  $fifoPath
+        public $fifoPath
     ){
+        $this->queue = 'camera';
     }
 
     /**
