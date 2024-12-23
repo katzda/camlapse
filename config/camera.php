@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'fifo_storage_path' => storage_path('fifo/video_snapshot.fifo'),
+    'fifo_path' => [
+        'snapshot' => '/tmp/video_snapshot.fifo',
+    ],
 ];

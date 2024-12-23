@@ -17,8 +17,7 @@ class TakeTestSnapshot implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public $hardware_id,
-        public $fifoPath
+        public $hardware_id
     ){
         $this->queue = 'camera';
     }
@@ -28,6 +27,7 @@ class TakeTestSnapshot implements ShouldQueue
      */
     public function handle(): void
     {
+        $fifoPath = config('camera.fifo_path.snapshot');
         $hardwareModel = HardwareModel::find($this->hardware_id);
 
         $os_device_handle = $hardwareModel->device;
@@ -43,6 +43,6 @@ class TakeTestSnapshot implements ShouldQueue
         }
 
         //shell exec does not provide exit code, but returns console output like a regular function
-        shell_exec("ffmpeg -f v4l2 -i $os_device_handle -frames:v 1 -f image2pipe -y $this->fifoPath");
+        shell_exec("ffmpeg -f v4l2 -i $os_device_handle -frames:v 1 -f image2pipe -y $fifoPath");
     }
 }
