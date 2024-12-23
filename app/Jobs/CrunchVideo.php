@@ -48,12 +48,10 @@ class CrunchVideo implements ShouldQueue
         $this->insertMeta($camlapse->id, $crunchVideoEvent->referenceId, 'start', null);
 
         $start_ms = microtime(true);
+        $abs_path = public_path("/timelapse/$camlapse->id/photos");
 
-        $baseDir = 'timelapse/' . $camlapse->id;
-        $abs_path = public_path($baseDir . "/photos");
-
-        if (!is_dir(public_path($baseDir))) {
-            mkdir(public_path($baseDir), 0777, true);
+        if (!is_dir($abs_path)) {
+            mkdir($abs_path, 0777, true);
         }
 
         $photos = scandir($abs_path);
@@ -62,14 +60,14 @@ class CrunchVideo implements ShouldQueue
         });
 
         $photos = array_map(function ($filename) use ($abs_path) {
-            return $abs_path . '/' . $filename;
+            return "$abs_path/$filename";
         }, $photos);
 
         # Generate the input file list for ffmpeg
         sort($photos);
 
-        $file_list = public_path($baseDir . "/filelist.txt");
-        $video_dir = public_path($baseDir);
+        $file_list = $abs_path . "/filelist.txt";
+        $video_dir = "$abs_path/..";
 
         if (file_exists($file_list)) {
             unlink($file_list);

@@ -18,6 +18,9 @@ then
   chgrp -R www-data .;
 fi;
 
+chown www-data:www-data /database;
+gosu www-data touch /database/database.sqlite;
+
 #ONLY NOW I CAN START WRITING INTO THE LARAVEL DIRECTORY
 #create empty directories, because in production laravel might complain that paths don't exist even if redis is used
 

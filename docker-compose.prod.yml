@@ -2,7 +2,7 @@ services:
     app:
         container_name: camlapse
         hostname: camlapse
-        image: camlapse:latest
+        image: camlapse_$build_stage:latest
         privileged: true
         healthcheck:
             test: curl --fail --header 'Host:camlapse.world' http://127.0.0.1 || exit 1
@@ -18,7 +18,8 @@ services:
                 - GID
         volumes:
             - ./.env:/srv/.env
-            - ./database/database.sqlite:/srv/database/database.sqlite
+            - database_data:/database
+            - timelapse_data:/timelapse
         ports:
             - 80:80
         expose:
@@ -43,6 +44,8 @@ services:
 
 volumes:
     redis_data:
+    database_data:
+    timelapse_data:
 
 networks:
     frontend:

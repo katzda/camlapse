@@ -16,11 +16,11 @@
         </a>
 
         <video controls class="mx-auto">
-            <source src="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4') }}" type="video/mp4">
+            <source src="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4?v=' . $camlapse['lastModified']) }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <a href="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4') . '?v=' . $camlapse['lastModified'] }}" download="{{ strtolower(str_replace(' ', '_',$camlapse['name'])) }}">download</a>
+        <a href="{{ asset('timelapse/'.$camlapse['id'].'/video.mp4' . '?v=' . $camlapse['lastModified']) }}" download="{{ strtolower(str_replace(' ', '_',$camlapse['name'])) }}">download</a>
 
         @if(!$camlapse['is_active'])
         <x-form

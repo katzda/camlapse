@@ -18,6 +18,8 @@ services:
                 - GID
         volumes:
             - .:/srv
+            - database_data:/database
+            - timelapse_data:/public/timelapse
         ports:
             - 80:80
         expose:
@@ -42,6 +44,8 @@ services:
 
 volumes:
     redis_data:
+    database_data:
+    timelapse_data:
 
 networks:
     frontend:

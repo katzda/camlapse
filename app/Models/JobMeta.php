@@ -30,8 +30,10 @@ class JobMeta extends Model
 
     public static function isLastFinished($lapse_id): bool
     {
-        return JobMeta::where('camlapse_id', '=', $lapse_id)
+        $job = JobMeta::where('camlapse_id', '=', $lapse_id)
             ->orderBy('created_at', 'DESC')
-            ->value('type') == 'end';
+            ->value('type');
+
+        return empty($job) || $job == 'end';
     }
 }

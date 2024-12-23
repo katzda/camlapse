@@ -46,15 +46,15 @@ class CameraLapseService {
         }
 
         // Define the temporary file path
-        $dir = 'timelapse/' . $camlapse->id . "/photos";
+        $dir = public_path("/timelapse/$camlapse->id/photos");
 
-        if (!is_dir(public_path($dir))) {
-            mkdir(public_path($dir), 0777, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
         }
 
-        $photo = '/' . str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
+        $photo = str_replace(" ", "T", $now->toDateTimeString()) . '.jpg';
 
-        $cmd = "ffmpeg -f v4l2 -i $hardware->device -frames:v 1 " . public_path($dir . $photo);
+        $cmd = "ffmpeg -f v4l2 -i $hardware->device -frames:v 1 $dir/$photo";
         $output = null;
         $exitCode = null;
         exec($cmd, $output, $exitCode);

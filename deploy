@@ -1,13 +1,14 @@
 #!/bin/bash
 
-hash=$(docker image ls -f reference="camlapse:latest" --format "{{.ID}}");
+image=camlapse_prod:latest
+
+hash=$(docker image ls -f reference="$image" --format "{{.ID}}");
 
 username=katzda
 img_base_dir="/tmp/camlapse";
 app_base_dir="/home/$username/camlapse";
 image_tar="camlapse_$hash.tar";
 remote_server="$username@qa.server";
-overwrite=$1;
 
 mkdir -p $img_base_dir;
 
@@ -16,8 +17,8 @@ if [ -f "$img_base_dir/$image_tar.gz" ]; then
     echo "File exists: $img_base_dir/$image_tar.gz";
 else
     echo "Creating image archive locally: $img_base_dir/$image_tar.gz";
-    rm $img_base_dir/*;
-    docker save -o "$img_base_dir/$image_tar" docker.io/library/camlapse:latest;
+    rm $img_base_dir/* 2>/dev/null;
+    docker save -o "$img_base_dir/$image_tar" docker.io/library/$image;
     gzip $img_base_dir/$image_tar;
 fi
 
@@ -27,11 +28,11 @@ ssh -t $remote_server "
 ";
 
 # Check if image had been previously uploaded
-if ssh "$remote_server" "[ -f $img_base_dir/$image_tar.gz ] || [ -f $img_base_dir/$image_tar ]" && [ "$overwrite" != "overwrite" ]; then
+if ssh "$remote_server" "[ -f $img_base_dir/$image_tar.gz ] || [ -f $img_base_dir/$image_tar ]"; then
     echo "File exists on remote: $img_base_dir/$image_tar.gz";
 else
     echo "Deleting old remote files";
-    ssh -t $remote_server "rm $img_base_dir/*.gz $img_base_dir/*.tar";
+    ssh -t $remote_server "rm $img_base_dir/*.gz $img_base_dir/*.tar 2>/dev/null;";
     echo "Uploading image: $img_base_dir/$image_tar.gz";
     scp "$img_base_dir/$image_tar.gz" "$remote_server:$img_base_dir/$image_tar.gz";
 fi
@@ -69,6 +70,10 @@ ssh -t $remote_server "
     ./spinup prod
 
     echo 'finalizing'
+
+    export USERID=\$(id -u)
+    export GID=\$(id -g)
+    export build_stage=prod
 
     if grep -q '^APP_KEY=$' $app_base_dir/.env; then
         docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
