@@ -81,5 +81,6 @@ ssh -t $remote_server "
         echo "APP_KEY is already set";
     fi;
 
+    sleep 3;
     docker compose -f docker-compose.prod.yml exec -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
 "
