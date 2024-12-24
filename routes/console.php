@@ -1,6 +1,6 @@
 <?php
 
-use App\Console\Commands\CamLapse;
+use App\Console\Commands\CamLapseCmd;
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::command(CamLapse::class)->everyMinute();
+Schedule::command(CamLapseCmd::class)->everyMinute();
