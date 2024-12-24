@@ -64,12 +64,9 @@ ssh -t $remote_server "
     echo 'loading'
     echo $password | sudo -S -k docker load -i $image_tar;
 
-    echo 'configuring'
+    echo 'spinup'
 
     cd $app_base_dir;
-    touch database/database.sqlite;
-
-    echo 'spinup'
     echo $password | ./spinup prod
 
     echo 'finalizing'
@@ -89,4 +86,5 @@ ssh -t $remote_server "
 
     echo $password | sudo -S -k -E docker compose -f docker-compose.prod.yml \
         exec -T -u www-data app php artisan migrate --force --graceful --ansi;
+
 "

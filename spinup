@@ -3,5 +3,11 @@
 export build_stage=${1:-""}
 read -sp "[sudo] password for $USER: " password
 
+echo $password | sudo -S -k -E docker volume create camlapse_timelapse_data;
+echo $password | sudo -S -k -E docker volume create camlapse_redis_data;
+echo $password | sudo -S -k -E docker volume create camlapse_database_data;
+echo $password | sudo -S -k -E docker network create camlapse_frontend 2>/dev/null;
+echo $password | sudo -S -k -E docker network create camlapse_backend 2>/dev/null;
+
 echo $password | ./run down
 echo $password | ./run up --force-recreate -d --no-build;
