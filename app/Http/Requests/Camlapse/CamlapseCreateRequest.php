@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\LapseModel;
+namespace App\Http\Requests\Camlapse;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LapseModelCreateRequest extends FormRequest
+class CamlapseCreateRequest extends FormRequest
 {
     public function authorize(): bool
     {

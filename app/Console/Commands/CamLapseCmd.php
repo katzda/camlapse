@@ -2,19 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Models\LapseModel;
+use App\Models\Camlapse;
 use Illuminate\Console\Command;
 use App\Events\CrunchVideoEvent;
 use App\Services\CameraLapseService;
 
-class CamLapse extends Command
+class CamLapseCmd extends Command
 {
     protected $signature = 'app:snapshot';
     protected $description = 'Check timelapse crons and take due snapshots';
 
     public function handle()
     {
-        $camlapses = LapseModel::all();
+        $camlapses = Camlapse::all();
         $now = app()->make('Carbon::now');
         $cameraLapseService = app()->make(CameraLapseService::class);
 

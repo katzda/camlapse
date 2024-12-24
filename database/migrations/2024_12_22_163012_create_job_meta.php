@@ -18,7 +18,7 @@ return new class extends Migration
             $table->tinyInteger('reference_id', false, true);
             $table->string('type', 255);
             $table->integer('duration', false, true)->nullable();
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->index();
+            $table->integer('created_at');
         });
     }
 

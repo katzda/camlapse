@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\Camlapse;
 use Carbon\Carbon;
 use Cron\CronExpression;
-use App\Models\LapseModel;
 use App\Models\HardwareModel;
 
 class CameraLapseService {
 
-    public function isDue(LapseModel $camlapse, Carbon $now)
+    public function isDue(Camlapse $camlapse, Carbon $now)
     {
         $cron = new CronExpression($camlapse->cron); //https://github.com/dragonmantank/cron-expression
         // 5 custom conditions
@@ -36,7 +36,7 @@ class CameraLapseService {
         return true;
     }
 
-    public function saveCameraSnapshot(LapseModel $camlapse, Carbon $now, string &$error): bool
+    public function saveCameraSnapshot(Camlapse $camlapse, Carbon $now, string &$error): bool
     {
         $hardware = HardwareModel::find($camlapse->camera_id);
 

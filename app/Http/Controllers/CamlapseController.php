@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobMeta;
-use App\Models\LapseModel;
+use App\Models\Camlapse;
 use App\Models\HardwareModel;
-use App\Http\Requests\LapseModel\LapseModelEditRequest;
-use App\Http\Requests\LapseModel\LapseModelCreateRequest;
+use App\Http\Requests\Camlapse\CamlapseEditRequest;
+use App\Http\Requests\Camlapse\CamlapseCreateRequest;
 
-class LapseModelController extends Controller
+class CamlapseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $lapseModels = LapseModel::all();
+        $lapseModels = Camlapse::all();
         $lapses = [];
         foreach($lapseModels as $index => $lapseModel)
         {
@@ -47,7 +47,7 @@ class LapseModelController extends Controller
     public function create()
     {
         return View('camlapse.create', [
-            'camlapse' => new LapseModel(),
+            'camlapse' => new Camlapse(),
             'devices' => HardwareModel::all(),
         ]);
     }
@@ -55,9 +55,9 @@ class LapseModelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(LapseModelCreateRequest $request)
+    public function store(CamlapseCreateRequest $request)
     {
-        LapseModel::create($request->validated());
+        Camlapse::create($request->validated());
 
         return redirect(route('camlapse.index'));
     }
@@ -65,7 +65,7 @@ class LapseModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LapseModel $camlapse)
+    public function show(Camlapse $camlapse)
     {
         return View('camlapse.show', [
             'camlapse' => $camlapse
@@ -75,7 +75,7 @@ class LapseModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LapseModel $camlapse)
+    public function edit(Camlapse $camlapse)
     {
         return View('camlapse.edit', [
             'camlapse' => $camlapse,
@@ -86,7 +86,7 @@ class LapseModelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(LapseModelEditRequest $request, LapseModel $camlapse)
+    public function update(CamlapseEditRequest $request, Camlapse $camlapse)
     {
         $camlapse->update($request->validated());
 
@@ -98,7 +98,7 @@ class LapseModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LapseModel $camlapse)
+    public function destroy(Camlapse $camlapse)
     {
         $dir = public_path('timelapse/' . $camlapse->id);
 
@@ -109,14 +109,14 @@ class LapseModelController extends Controller
         return redirect(route('camlapse.index'));
     }
 
-    public function activate(LapseModel $camlapse)
+    public function activate(Camlapse $camlapse)
     {
-        LapseModel::deactivateAll();
+        Camlapse::deactivateAll();
         $camlapse->activate();
         return redirect(route('camlapse.index'));
     }
 
-    public function deactivate(LapseModel $camlapse)
+    public function deactivate(Camlapse $camlapse)
     {
         $camlapse->deactivate();
         return redirect(route('camlapse.index'));

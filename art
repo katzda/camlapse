@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./exec -it -u www-data app php artisan "${@:1}"
+./exec -u www-data app php artisan "${@:1}"

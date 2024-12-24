@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\JobMeta;
-use App\Models\LapseModel;
+use App\Models\Camlapse;
 use Illuminate\Bus\Queueable;
 use App\Events\CrunchVideoEvent;
 use Illuminate\Queue\SerializesModels;
@@ -24,7 +24,7 @@ class CrunchVideo implements ShouldQueue
 
     private function insertMeta(int $camlapse_id, int $reference_id, string $type, ?int $duration):void
     {
-        JobMeta::insert([
+        JobMeta::create([
             'camlapse_id' => $camlapse_id,
             'reference_id' => $reference_id,
             'type' => $type,
@@ -43,7 +43,7 @@ class CrunchVideo implements ShouldQueue
             return;
         }
 
-        $camlapse = LapseModel::find($crunchVideoEvent->lapseModelId);
+        $camlapse = Camlapse::find($crunchVideoEvent->lapseModelId);
 
         $this->insertMeta($camlapse->id, $crunchVideoEvent->referenceId, 'start', null);
 

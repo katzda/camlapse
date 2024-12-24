@@ -1,5 +1,6 @@
 #!/bin/bash
 
 export build_stage=${1:-""}
+read -sp "[sudo] password for $USER: " password
 
-./run build
+echo $password | ./run build

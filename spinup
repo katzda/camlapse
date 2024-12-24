@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export build_stage=${1:-""}
+read -sp "[sudo] password for $USER: " password
 
-./run down
-./run up --force-recreate -d --no-build;
+echo $password | ./run down
+echo $password | ./run up --force-recreate -d --no-build;

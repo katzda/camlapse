@@ -3,5 +3,6 @@
 export USERID=$(id -u)
 export GID=$(id -g)
 export build_stage=${build_stage:-dev}
+password=$(cat)
 
-docker compose -f docker-compose.$build_stage.yml "${@:1}";
+echo $password | sudo -S -k -E docker compose -f docker-compose.$build_stage.yml "${@:1}";

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LapseModel extends Model
+class Camlapse extends Model
 {
     use HasFactory;
 
@@ -55,7 +55,7 @@ class LapseModel extends Model
 
     public static function deactivateAll()
     {
-        LapseModel::where('is_active', true)
+        Camlapse::where('is_active', true)
             ->update([
                 'is_active' => false
             ]);

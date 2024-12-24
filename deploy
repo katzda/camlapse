@@ -2,7 +2,9 @@
 
 image=camlapse_prod:latest
 
-hash=$(docker image ls -f reference="$image" --format "{{.ID}}");
+read -sp "[sudo] password for $USER: " password
+
+hash=$(echo $password | sudo -S -k docker image ls -f reference="$image" --format "{{.ID}}");
 
 username=katzda
 img_base_dir="/tmp/camlapse";
@@ -18,7 +20,8 @@ if [ -f "$img_base_dir/$image_tar.gz" ]; then
 else
     echo "Creating image archive locally: $img_base_dir/$image_tar.gz";
     rm $img_base_dir/* 2>/dev/null;
-    docker save -o "$img_base_dir/$image_tar" docker.io/library/$image;
+    echo $password | sudo -S -k docker save -o "$img_base_dir/$image_tar" docker.io/library/$image;
+    echo $password | sudo -S -k chown $USER:$USER "$img_base_dir/$image_tar"
     gzip $img_base_dir/$image_tar;
 fi
 
@@ -59,7 +62,7 @@ ssh -t $remote_server "
     fi;
 
     echo 'loading'
-    docker load -i $image_tar;
+    echo $password | sudo -S -k docker load -i $image_tar;
 
     echo 'configuring'
 
@@ -67,7 +70,7 @@ ssh -t $remote_server "
     touch database/database.sqlite;
 
     echo 'spinup'
-    ./spinup prod
+    echo $password | ./spinup prod
 
     echo 'finalizing'
 
@@ -76,11 +79,14 @@ ssh -t $remote_server "
     export build_stage=prod
 
     if grep -q '^APP_KEY=$' $app_base_dir/.env; then
-        docker compose -f docker-compose.prod.yml exec -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
+        echo $password | sudo -S -k docker compose -f docker-compose.prod.yml exec \
+            -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
     else
         echo "APP_KEY is already set";
     fi;
 
     sleep 3;
-    docker compose -f docker-compose.prod.yml exec -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
+
+    echo $password | sudo -S -k docker compose -f docker-compose.prod.yml exec \
+        -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
 "

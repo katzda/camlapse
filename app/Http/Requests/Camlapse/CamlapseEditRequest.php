@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\LapseModel;
+namespace App\Http\Requests\Camlapse;
 
-class LapseModelEditRequest extends LapseModelCreateRequest
+class CamlapseEditRequest extends CamlapseCreateRequest
 {
     public $camlapse;
 
