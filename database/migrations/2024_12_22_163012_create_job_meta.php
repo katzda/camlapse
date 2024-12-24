@@ -15,10 +15,9 @@ return new class extends Migration
         Schema::create('job_meta', function (Blueprint $table) {
             $table->id();
             $table->integer('camlapse_id', false, true)->index();
-            $table->tinyInteger('reference_id', false, true);
             $table->string('type', 255);
             $table->integer('duration', false, true)->nullable();
-            $table->integer('created_at');
+            $table->integer('timestamp')->index();
         });
     }
 

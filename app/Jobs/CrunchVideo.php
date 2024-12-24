@@ -22,13 +22,13 @@ class CrunchVideo implements ShouldQueue
         $this->queue = 'camera';
     }
 
-    private function insertMeta(int $camlapse_id, int $reference_id, string $type, ?int $duration):void
+    private function insertMeta(int $camlapse_id, string $type, ?int $duration):void
     {
-        JobMeta::create([
+        JobMeta::insert([
             'camlapse_id' => $camlapse_id,
-            'reference_id' => $reference_id,
             'type' => $type,
             'duration' => $duration,
+            'timestamp' => round(microtime(true) * 1000),
         ]);
     }
 
@@ -45,7 +45,7 @@ class CrunchVideo implements ShouldQueue
 
         $camlapse = Camlapse::find($crunchVideoEvent->lapseModelId);
 
-        $this->insertMeta($camlapse->id, $crunchVideoEvent->referenceId, 'start', null);
+        $this->insertMeta($camlapse->id, 'start', null);
 
         $start_ms = microtime(true);
         $abs_path = public_path("/timelapse/$camlapse->id/photos");
@@ -86,6 +86,6 @@ class CrunchVideo implements ShouldQueue
 
         $end_ms = microtime(true);
 
-        $this->insertMeta($camlapse->id, $crunchVideoEvent->referenceId, 'end', $end_ms - $start_ms);
+        $this->insertMeta($camlapse->id, 'end', $end_ms - $start_ms);
     }
 }

@@ -16,38 +16,30 @@ class JobMeta extends Model
 
     protected $fillable = [
         'camlapse_id',
-        'reference_id',
         'type',
         'duration',
-        'created_at'
+        'timestamp'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Set the default `created_at` timestamp in milliseconds if it's not provided
-        static::creating(function ($jobMeta) {
-            if (!$jobMeta->created_at) {
-                $jobMeta->created_at = round(microtime(true) * 1000);  // Unix timestamp in milliseconds
-            }
-        });
-    }
 
     protected function casts(): array
     {
         return [
             'camlapse_id' => 'integer',
-            'reference_id' => 'integer',
             'duration' => 'integer',
-            'created_at' => 'datetime:Y-m-d H:i',
+            'timestamp' => 'timestamp',
         ];
+    }
+
+    public function getTimestampAttribute($value)
+    {
+        return Carbon::createFromTimestampMs($value)->format('Y-m-d H:i:s.v');
     }
 
     public static function isLastFinished($lapse_id): bool
     {
         $job = JobMeta::where('camlapse_id', '=', $lapse_id)
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('timestamp', 'DESC')
+            ->limit(1)
             ->value('type');
 
         return empty($job) || $job == 'end';
