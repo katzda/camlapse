@@ -79,14 +79,14 @@ ssh -t $remote_server "
     export build_stage=prod
 
     if grep -q '^APP_KEY=$' $app_base_dir/.env; then
-        echo $password | sudo -S -k docker compose -f docker-compose.prod.yml exec \
-            -u www-data app php artisan key:generate --force --ansi 2>/dev/null;
+        echo $password | sudo -S -k -E docker compose -f docker-compose.prod.yml \
+            exec -T -u www-data app php artisan key:generate --force --ansi;
     else
         echo "APP_KEY is already set";
     fi;
 
     sleep 3;
 
-    echo $password | sudo -S -k docker compose -f docker-compose.prod.yml exec \
-        -u www-data app php artisan migrate --force --graceful --ansi 2>/dev/null;
+    echo $password | sudo -S -k -E docker compose -f docker-compose.prod.yml \
+        exec -T -u www-data app php artisan migrate --force --graceful --ansi;
 "
