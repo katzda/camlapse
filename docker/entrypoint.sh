@@ -18,7 +18,7 @@ then
   chgrp -R www-data .;
 fi;
 
-chown www-data:www-data /database;
+chown www-data:www-data /database public/timelapse;
 gosu www-data touch /database/database.sqlite;
 
 #ONLY NOW I CAN START WRITING INTO THE LARAVEL DIRECTORY

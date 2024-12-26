@@ -46,7 +46,7 @@ if ssh "$remote_server" "[ -f $app_base_dir/.env ]"; then
 else
     echo "Uploading .env file";
     scp ./.env "$remote_server:$app_base_dir";
-    ssh -t $remote_server "sed -i \"s/APP_KEY=.*/APP_KEY=/;s/APP_ENV=.*/APP_ENV=production/\"" $app_base_dir/.env;
+    ssh -t $remote_server "sed -i \"s/APP_KEY=.*/APP_KEY=/;\"" $app_base_dir/.env;
 fi
 
 scp ./docker-compose.prod.yml ./run ./spinup ./enter ./exec "$remote_server:$app_base_dir";

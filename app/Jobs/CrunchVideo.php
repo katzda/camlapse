@@ -55,8 +55,9 @@ class CrunchVideo implements ShouldQueue
         }
 
         $photos = scandir($abs_path);
-        $photos = array_filter($photos, function ($filename) {
-            return str_ends_with($filename, '.jpg');
+        $photos = array_filter($photos, function ($filename) use ($abs_path){
+            $filePath = "$abs_path/$filename";
+            return str_ends_with($filename, '.jpg') && filesize($filePath) > 0;;
         });
 
         $photos = array_map(function ($filename) use ($abs_path) {
