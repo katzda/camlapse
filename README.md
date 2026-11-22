@@ -1,3 +1,13 @@
+# Create local docker images
+./build
+
+# Install dependencies
+./composer install
+./npm install
+
+# Create local SQLite database
+./art migrate:fresh
+
 # Add host entry:
 127.0.0.1 camlapse.world
 

@@ -17,14 +17,14 @@ $is_method_standard = $method === 'GET' || $method === 'POST';
 
 <form action="{{ $action }}"
     {!! $is_method_standard ? "method=\"$method\"" : "method=\"POST\"" !!}
-    class="w-full text-center p-3 {{ $class }} rounded-lg">
+    class="w-full rounded-lg p-4 text-center text-slate-900 {{ $class }}">
 
     @if(!$is_method_standard)
     @method($method)
     @endif
 
     @if(!empty($title))
-    <h1 class="font-bold text-4xl py-5">{{$title}}</h1>
+    <h1 class="py-4 text-2xl font-semibold sm:text-3xl">{{$title}}</h1>
     @endif
 
     @if(!empty($fields))
@@ -33,14 +33,14 @@ $is_method_standard = $method === 'GET' || $method === 'POST';
         @foreach ($fields as $fieldkey => $fieldvalue)
         @if($method != 'GET')
         <div class="table-row leading-10 text-left">
-            <label for="{{$id}}-{{$fieldkey}}" class="table-cell pr-3 text-right">
+            <label for="{{$id}}-{{$fieldkey}}" class="table-cell pr-3 text-right font-medium text-slate-700">
                 {{ $fieldvalue['title']}}
             </label>
 
             @if( $fieldvalue['type'] !== 'select')
                 <input id="{{$id}}-{{$fieldkey}}"
                     name="{{$fieldkey}}" type="{{$fieldvalue['type']}}"
-                    class="table-cell my-1 px-2 text-black"
+                    class="table-cell my-1 rounded border border-slate-300 px-2 text-black focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     {{ isset($fieldvalue['required']) && $fieldvalue['required'] ? 'required' : '' }}
 
                     @if(isset($fieldvalue['other']))
@@ -57,7 +57,7 @@ $is_method_standard = $method === 'GET' || $method === 'POST';
                 ?>
                 <select
                     name="{{$fieldkey}}" id="{{$id}}-{{$fieldkey}}"
-                    class="table-cell my-1 px-2 text-black"
+                    class="table-cell my-1 rounded border border-slate-300 px-2 text-black focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     {{ isset($fieldvalue['required']) && $fieldvalue['required'] ? 'required' : '' }}
                 >
                     @foreach($list as $index => $device)
@@ -81,7 +81,7 @@ $is_method_standard = $method === 'GET' || $method === 'POST';
         </div>
         @else
         <div class="table-row leading-10">
-            <div class="table-cell pr-3 text-right">{{ $fieldvalue['title']}}:</div>
+            <div class="table-cell pr-3 text-right font-medium text-slate-700">{{ $fieldvalue['title']}}:</div>
             <div class="table-cell my-1 px-2 text-left">{{ $fieldvalue['value'] }}</div>
         </div>
         @endif
@@ -99,9 +99,9 @@ $is_method_standard = $method === 'GET' || $method === 'POST';
 
     <div class="flex justify-center">
         @if(isset($cancel_path))
-        <a href="{{ $cancel_path }}" class="bg-blue-300 w-1/2 leading-[3] m-2">{{ $cancel }}</a>
+        <a href="{{ $cancel_path }}" class="m-2 w-1/2 rounded bg-blue-300 font-medium leading-[3] text-slate-900 hover:bg-blue-400">{{ $cancel }}</a>
         @endif
 
-        <button type="submit" class="bg-blue-300 w-1/2 h-[50px] m-2">{{$submit}}</button>
+        <button type="submit" class="m-2 h-[50px] w-1/2 rounded bg-blue-300 font-medium text-slate-900 hover:bg-blue-400">{{$submit}}</button>
     </div>
 </form>

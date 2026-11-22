@@ -3,10 +3,10 @@
 @section('content')
 
 <div class="w-full">
-    <div class="p-4 bg-white rounded-lg shadow-md w-max mx-auto">
-        <h1 class="text-xl font-bold mb-4 text-center">Camera Settings</h1>
+    <div class="mx-auto w-max rounded-lg bg-white p-5 text-slate-900 shadow-md">
+        <h1 class="mb-4 text-center text-2xl font-semibold">Camera Settings</h1>
 
-        <span class="text-sm">{{ $device['name'] }}</span>
+        <span class="text-base font-medium text-slate-700">{{ $device['name'] }}</span>
 
         <!-- Photo Area -->
         <div class="w-full lg:w-96 h-56 lg:h-96 bg-gray-200 rounded-lg flex items-center justify-center mb-4">

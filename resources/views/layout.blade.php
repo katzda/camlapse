@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    class="min-h-full font-sans antialiased dark:bg-black dark:text-white/50
-        bg-black text-black/50 dark:bg-black dark:text-white/50 h-full">
+    class="min-h-full h-full bg-black font-sans text-slate-100 antialiased">
 
 <head>
     <meta charset="utf-8">
@@ -15,12 +14,12 @@
 
 </head>
 
-<body>
+<body class="min-h-full">
     <img class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" />
     <div class="relative flex flex-col items-center justify-start selection:bg-[#FF2D20] selection:text-white">
         <div class="w-full max-w-2xl px-6 lg:max-w-5xl">
 
-            <header class="h-[50px] bg-gray-200">
+            <header class="h-[50px] rounded-t-lg bg-gray-200 text-slate-900">
                 <div class="flex h-full">
                     <x-navbut icon='zondicon-home' route="home">Devices</x-navbut>
                     <x-navbut icon='zondicon-list' route="camlapse.index">Time Lapses</x-navbut>
@@ -32,7 +31,7 @@
                 @yield('content')
             </main>
 
-            <footer class="py-16 text-center text-sm text-black dark:text-white/70">
+            <footer class="py-12 text-center text-sm text-slate-400">
                 CamLapse
             </footer>
         </div>

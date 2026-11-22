@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-a.nav-icon:hover>div{
+@layer base {
+    body {
+        font-family: Figtree, ui-sans-serif, system-ui, sans-serif;
+        @apply leading-relaxed;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply tracking-tight;
+    }
+}
+
+a.nav-icon:hover>div {
     background-color: #ff392d73
 }

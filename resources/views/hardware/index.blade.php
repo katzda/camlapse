@@ -15,15 +15,15 @@
         </div>
     </form>
 
-    <table class="table bg-gray-300 w-full text-center">
+    <table class="table w-full bg-gray-200 text-center text-slate-900">
         <tr class="border-bottom border-b-2">
-            <th>Settings</th>
-            <th>Device</th>
-            <th>OS Handle</th>
+            <th class="py-3 text-sm font-semibold uppercase tracking-wide text-slate-600">Settings</th>
+            <th class="py-3 text-sm font-semibold uppercase tracking-wide text-slate-600">Device</th>
+            <th class="py-3 text-sm font-semibold uppercase tracking-wide text-slate-600">OS Handle</th>
         </tr>
         @foreach ($devices as $index => $device)
-        <tr>
-            <td>
+        <tr class="border-b border-slate-300 last:border-b-0">
+            <td class="py-2">
                 <a href="{{ route('settings.show', $device['id']) }}"
                     class="w-[50px] inline-block text-red-600 hover:text-red-800"
                 >
@@ -32,8 +32,8 @@
                     </span>
                 </a>
             </td>
-            <td>{{ $device['name'] }}</td>
-            <td>{{ $device['device'] }}</td>
+            <td class="py-2">{{ $device['name'] }}</td>
+            <td class="py-2">{{ $device['device'] }}</td>
         </tr>
         @endforeach
     </table>
