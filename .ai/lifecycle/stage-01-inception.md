@@ -1,8 +1,8 @@
 # Stage 1: Inception
 
-**Status:** Proposed — revised question-answer format  
+**Status:** Historical snapshot — Stage 1 approval was not separately recorded
 **Scope:** Read-only current-state discovery for the `katzda/camlapse` repository.  
-**Outcome sought:** Establish an evidence-based picture of the existing application before selecting a product change. No feature or implementation scope has been selected.
+**Outcome sought:** Establish an evidence-based picture of the existing application before selecting a product change. At the time of this snapshot, no future feature scope had been selected.
 
 ## Current-state summary
 
@@ -28,18 +28,18 @@ Camera detection uses `v4l2-ctl` and ffmpeg (`HardwareModel`). Application data 
 
 See [System overview](../architecture/system-overview.md) for a Mermaid flow and system boundaries.
 
-## Open questions
+## Historical questions and approval status
 
-The purpose of this inception is repository understanding, not a feature proposal. The next stage needs the user to identify the intended outcome and relevant constraints. Tracked as Q-001 through Q-003 in [the question log](../questions/question-log.md).
+The initial prompts covered intended outcome (Q-001), operating environment (Q-002), and scope (Q-003). They are retained here as historical discovery topics; the user's later deployment goals and approved design are recorded in [ITER-001](../iterations/ITER-001/overview.md), so these prompts are no longer active blockers for that work.
 
-The question log is formatted for direct answers: choose a suggested option or enter a custom response in the `Your answer` space. It also includes a separate Stage 1 approval choice. Suggested options do not represent decisions unless the user selects them.
+The Stage 1 approval prompt was not separately answered. Later approval of Stage 4 does not retroactively approve Stage 1. This inception remains a historical current-state snapshot, not an active gate for ITER-001.
 
-## Risks and unknowns
+## Risks and unknowns at inception
 
 - Camera capture and video generation depend on external hardware and system executables; automated test behavior for those integrations is not established by the current tests.
 - Docker configuration shows local deployment components, but the intended production environment, operator, and operational expectations are not established by repository evidence.
 - The repository does not establish which future product change should be prioritized.
 
-## Next stage
+## Subsequent work
 
-After this inception is approved, proceed to Stage 2 (Product discovery) to resolve the intended outcome, users/environment, and scope. No implementation is authorized by this inception.
+The deployment iteration proceeded through later discovery, design, and delivery planning. Its current status and open questions are in [ITER-001](../iterations/ITER-001/overview.md); implementation remains gated by per-ticket approval.

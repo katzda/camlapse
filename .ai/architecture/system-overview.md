@@ -47,3 +47,7 @@ flowchart TD
 - Device discovery: `app/Models/HardwareModel.php`
 - Data schema and runtime configuration: `database/migrations/`, `config/database.php`, `config/queue.php`
 - Containers and persistent volumes: `docker-compose.dev.yml`, `docker-compose.prod.yml`
+
+## Proposed deployment direction
+
+The deployment design under review is documented in [Stage 4: Rootless multi-environment deployment](../lifecycle/stage-04-solution-design.md). Its current proposal uses rootless Docker for local, QA, and production targets; publishes the app (including Horizon at `/horizon`) on each target's configured HTTP port; keeps Redis private; and isolates persistent data by instance. This is a proposal, not an implementation or deployment guarantee.
